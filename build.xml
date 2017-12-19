@@ -83,17 +83,12 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="LoadExpectResult (1)">
+    <target name="LoadExpectResult">
         <java classname="Auto.LoadExpectResult" failonerror="true" fork="yes">
             <classpath refid="XML.classpath"/>
         </java>
     </target>
-    <target name="LoadInformation">
-        <java classname="Auto.LoadTestCase" failonerror="true" fork="yes">
-            <classpath refid="XML.classpath"/>
-        </java>
-    </target>
-    <target name="method (17)">
+    <target name="method">
         <java classname="Auto.method" failonerror="true" fork="yes">
             <classpath refid="XML.classpath"/>
         </java>
