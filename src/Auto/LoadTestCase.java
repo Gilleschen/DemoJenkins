@@ -21,7 +21,7 @@ public class LoadTestCase {
 	public LoadTestCase() {
 
 		try {
-			File fXmlFile = new File("ZFJ-Executions-12-19-2017.xml");
+			File fXmlFile = new File("ZFJ.xml");
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(fXmlFile);
