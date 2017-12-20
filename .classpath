@@ -37,5 +37,6 @@
 	<classpathentry exported="true" kind="lib" path="C:/Users/jhih_chen/Desktop/test/XML/lib/xalan-2.7.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="C:/Users/jhih_chen/Desktop/test/XML/lib/xercesImpl-2.11.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="C:/Users/jhih_chen/Desktop/test/XML/lib/xml-apis-1.4.01.jar"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

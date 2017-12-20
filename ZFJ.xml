@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <executions>
-    	        	<execution>
+    		        	<execution>
 				<executionId>633</executionId>	
 				<Cycle>QA test Zephyr training 4</Cycle>	
 				<issueKey>QAM-105</issueKey>
@@ -25,7 +25,7 @@
                                 <stepId>2858</stepId>
 								<orderId>1</orderId>
 								<step><![CDATA[LaunchAPP]]></step>
-								<testData><![CDATA[com.wuunet.warahome, com.wuunet.warahome.SplashScreenActivity,4100432e44c49139,6.0.1]]></testData>
+								<testData><![CDATA[com.wuunet.warahome, com.wuunet.warahome.SplashScreenActivity,4d00ba0a7fd64003,5.0.1]]></testData>
 								<expectedResult><![CDATA[]]></expectedResult>
 								<stepResult>UNEXECUTED</stepResult>
 								<Comment><![CDATA[]]></Comment>
