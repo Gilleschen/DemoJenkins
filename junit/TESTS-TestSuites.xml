@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites>
-  <testsuite errors="0" failures="0" hostname="YIL-Jhih-Chen" id="0" name="Junit" package="Auto" skipped="0" tests="1" time="0.047" timestamp="2017-12-20T07:45:53">
+  <testsuite errors="0" failures="0" hostname="YIL-Jhih-Chen" id="0" name="Junit" package="Auto" skipped="0" tests="1" time="0.031" timestamp="2017-12-20T07:50:32">
       <properties>
           <property name="java.vendor" value="Oracle Corporation" />
 
@@ -180,7 +180,7 @@
 
           <property name="ant.version" value="Apache Ant(TM) version 1.9.6 compiled on June 29 2015" />
 
-          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner Auto.Junit skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.OutErrSummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\jhih_chen\Desktop\test\XML_Junit\junit\TEST-Auto.Junit.xml crashfile=C:\Users\jhih_chen\Desktop\test\XML_Junit\junitvmwatcher5314672297659772760.properties propsfile=C:\Users\jhih_chen\Desktop\test\XML_Junit\junit1103742381514767274.properties" />
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner Auto.Junit skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.OutErrSummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\jhih_chen\Desktop\test\XML_Junit\junit\TEST-Auto.Junit.xml crashfile=C:\Users\jhih_chen\Desktop\test\XML_Junit\junitvmwatcher7567530263140916718.properties propsfile=C:\Users\jhih_chen\Desktop\test\XML_Junit\junit5442166803184412571.properties" />
 
           <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
 
@@ -266,7 +266,7 @@
 
       </properties>
 
-      <testcase classname="Auto.Junit" name="Case[0]" time="0.001" />
+      <testcase classname="Auto.Junit" name="Case[0]" time="0.0" />
 
       <system-out><![CDATA[[info] CaseName:|[Demo][KalayLightingCam]About|
 [info] Executing:|LaunchAPP|com.wuunet.warahome|
