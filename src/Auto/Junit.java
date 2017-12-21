@@ -3,7 +3,11 @@ package Auto;
 import static org.junit.Assert.*;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,45 +18,38 @@ import org.junit.runners.Parameterized.Parameters;
 public class Junit {
 
 	private boolean result;
+	private String casename;
 
-	public Junit(boolean result) throws NoSuchMethodException, SecurityException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException, InstantiationException {
-
+	public Junit(String casename, boolean result) throws NoSuchMethodException, SecurityException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+		this.casename = casename;
 		this.result = result;
 
 	}
 
-	@Parameters
+	@Parameters(name = "{index}. CaseName:{0}")
 	public static Collection primeNumbers() throws NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, InstantiationException, ClassNotFoundException {
 		method Method = new method();
-		return Method.method();
+
+		ArrayList<ArrayList> ResultList = Method.method();
+
+		Object obj[][] = new Object[ResultList.size()][ResultList.get(0).size()];
+		for (int i = 0; i < ResultList.size(); i++) {
+			for (int j = 0; j < ResultList.get(i).size(); j++) {
+				obj[i][j] = ResultList.get(i).get(j);
+			}
+		}
+		List list = Arrays.asList(obj);
+
+		return list;
+		// Arrays.asList(new
+		// Object[][]{{"login",true},{"logout",false}});
 	}
 
 	@Test
 	public void Case() {
 		assertTrue(result);
 	}
-	// @Test
-	// public void test() {
-	// boolean result;
-	// String[] s = { "true", "false" };
-	// for (int i = 0; i < s.length; i++) {
-	// switch (s[i]) {
-	//
-	// case "true":
-	// result = new Boolean(s[i]).booleanValue();
-	// break;
-	// case "false":
-	// result = new Boolean(s[i]).booleanValue();
-	// break;
-	// default:
-	// result = false;
-	// break;
-	// }
-	// assertTrue(result);
-	// }
-	//
-	// }
 
 }

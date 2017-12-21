@@ -39,7 +39,8 @@ public class method {
 	int command_timeout = 30;// 30sec
 	LoadExpectResult ExpectResult = new LoadExpectResult();
 	static LoadTestCase TestCase = new LoadTestCase();
-	static ArrayList<Boolean> ResultList = new ArrayList<Boolean>();// 所有測試案例的執行結果
+	static ArrayList ResultList = new ArrayList();// 各測試案例的執行結果(一維)
+	static ArrayList<ArrayList> AllResultList = new ArrayList<ArrayList>();// 所有測試案例的執行結果(二維)
 	static AndroidDriver driver;
 	String ErrorList;
 	static String appElemnt;// APP元件名稱
@@ -66,7 +67,7 @@ public class method {
 	//
 	// }
 
-	public ArrayList<Boolean> method() throws NoSuchMethodException, SecurityException, IllegalAccessException,
+	public ArrayList<ArrayList> method() throws NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, InstantiationException {
 		Object obj = new method();
 		Class c = obj.getClass();
@@ -74,7 +75,8 @@ public class method {
 
 		for (int CurrentCase = 0; CurrentCase < TestCase.StepList.size(); CurrentCase++) {
 			System.out.println("[info] CaseName:|" + TestCase.CaseList.get(CurrentCase).toString() + "|");
-
+			ResultList = new ArrayList();
+			ResultList.add(TestCase.CaseList.get(CurrentCase).toString());
 			CommandError = true;// 預設CommandError為True
 			for (int CurrentCaseStep = 0; CurrentCaseStep < TestCase.StepList.get(CurrentCase)
 					.size(); CurrentCaseStep++) {
@@ -284,7 +286,7 @@ public class method {
 
 		}
 		System.out.println("測試結束!!!!!!!!");
-		return ResultList;
+		return AllResultList;
 	}
 
 	public void Byid_VerifyText() {
@@ -308,15 +310,17 @@ public class method {
 			if (result) {
 				System.out.println("[info] Result_Byid_VerifyText:|PASS|");
 				ResultList.add(true);
+
 			} else {
 				System.out.println("[info] Result_Byid_VerifyText:|FAIL|");
 				ResultList.add(false);
 			}
-
+			AllResultList.add(ResultList);
 		} catch (Exception e) {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;// 若找不到指定元件，則設定CommandError=false
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 
 		}
 
@@ -348,11 +352,12 @@ public class method {
 				System.out.println("[info] Result_ByXpath_VerifyText:|FAIL|");
 				ResultList.add(false);
 			}
-
+			AllResultList.add(ResultList);
 		} catch (Exception e) {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;// 若找不到指定元件，則設定CommandError=false
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 
 	}
@@ -366,6 +371,7 @@ public class method {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;// 若找不到指定元件，則設定CommandError=false
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 
 	}
@@ -379,6 +385,7 @@ public class method {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;// 若找不到指定元件，則設定CommandError=false
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 
 	}
@@ -392,6 +399,7 @@ public class method {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;// 若找不到指定元件，則設定CommandError=false
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 
 	}
@@ -405,6 +413,7 @@ public class method {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;// 若找不到指定元件，則設定CommandError=false
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 
 	}
@@ -418,6 +427,7 @@ public class method {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;// 若找不到指定元件，則設定CommandError=false
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 	}
 
@@ -430,6 +440,7 @@ public class method {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;// 若找不到指定元件，則設定CommandError=false
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 	}
 
@@ -443,6 +454,7 @@ public class method {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 	}
 
@@ -457,6 +469,7 @@ public class method {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;// 若找不到指定元件，則設定CommandError=false
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 
 	}
@@ -471,6 +484,7 @@ public class method {
 			System.out.println("[Error] Can't hide keyboard");
 			CommandError = false;
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 	}
 
@@ -515,6 +529,7 @@ public class method {
 			System.out.println("[Error]Fail to ScreenShot");
 			CommandError = false;
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 	}
 
@@ -536,6 +551,7 @@ public class method {
 			}
 			CommandError = false;
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 	}
 
@@ -558,6 +574,7 @@ public class method {
 				}
 				if (!state) {
 					ResultList.add(true);
+					AllResultList.add(ResultList);
 				}
 			}
 
@@ -566,6 +583,7 @@ public class method {
 			System.out.println("[Error] Can't quit APP");
 			CommandError = false;
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 
 	}
@@ -579,6 +597,7 @@ public class method {
 			System.out.println("[Error] Can't reset APP");
 			CommandError = false;
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 	}
 
@@ -600,6 +619,7 @@ public class method {
 			System.out.println(" or can not find appPackage: " + appPackage);
 			CommandError = false;
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 	}
 
@@ -611,6 +631,7 @@ public class method {
 			System.out.println("[Error] Can't execute Back button");
 			CommandError = false;
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 
 	}
@@ -623,6 +644,7 @@ public class method {
 			System.out.println("[Error] Can't execute Home button");
 			CommandError = false;
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 
 	}
@@ -635,6 +657,7 @@ public class method {
 			System.out.println("[Error] Can't execute Power button");
 			CommandError = false;
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 
 	}
@@ -657,6 +680,7 @@ public class method {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 	}
 
@@ -669,6 +693,7 @@ public class method {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 	}
 
@@ -683,6 +708,7 @@ public class method {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 	}
 
@@ -697,6 +723,7 @@ public class method {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;
 			ResultList.add(false);
+			AllResultList.add(ResultList);
 		}
 
 	}
