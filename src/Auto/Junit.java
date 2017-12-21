@@ -1,14 +1,11 @@
 package Auto;
 
 import static org.junit.Assert.*;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-
 import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -27,14 +24,12 @@ public class Junit {
 
 	}
 
-	//@Parameters(name = "{index}. CaseName:{0}")
+	// @Parameters(name = "{index}. CaseName:{0}")
 	@Parameters(name = "{0}")
 	public static Collection primeNumbers() throws NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, InstantiationException, ClassNotFoundException {
 		method Method = new method();
-
 		ArrayList<ArrayList> ResultList = Method.method();
-
 		Object obj[][] = new Object[ResultList.size()][ResultList.get(0).size()];
 		for (int i = 0; i < ResultList.size(); i++) {
 			for (int j = 0; j < ResultList.get(i).size(); j++) {

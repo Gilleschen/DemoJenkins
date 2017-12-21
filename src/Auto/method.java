@@ -12,9 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
-
 import org.apache.commons.io.FileUtils;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
@@ -24,7 +22,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
@@ -57,15 +54,7 @@ public class method {
 	static Boolean CommandError;// 判定執行的指令是否出現錯誤；ture為正確；false為錯誤
 	static int CurrentErrorDevice = 0;// 統計目前出錯的設備數量
 	static int CurrentCaseStep;
-	// public static void main(String[] args) throws IOException,
-	// NoSuchMethodException, SecurityException,
-	// IllegalAccessException, IllegalArgumentException,
-	// InvocationTargetException, InstantiationException {
-	//
-	// invokeFunction();
-	// System.out.println("測試結束!!!!!!!!");
-	//
-	// }
+	
 
 	public ArrayList<ArrayList> method() throws NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, InstantiationException {
@@ -373,7 +362,6 @@ public class method {
 			ResultList.add(false);
 			AllResultList.add(ResultList);
 		}
-
 	}
 
 	public void ByXpath_Wait() {
@@ -387,7 +375,6 @@ public class method {
 			ResultList.add(false);
 			AllResultList.add(ResultList);
 		}
-
 	}
 
 	public void Byid_SendKey() {
@@ -401,7 +388,6 @@ public class method {
 			ResultList.add(false);
 			AllResultList.add(ResultList);
 		}
-
 	}
 
 	public void ByXpath_SendKey() {
@@ -415,7 +401,6 @@ public class method {
 			ResultList.add(false);
 			AllResultList.add(ResultList);
 		}
-
 	}
 
 	public void Byid_Click() {
@@ -471,7 +456,6 @@ public class method {
 			ResultList.add(false);
 			AllResultList.add(ResultList);
 		}
-
 	}
 
 	public void HideKeyboard() {
@@ -508,7 +492,6 @@ public class method {
 		} catch (Exception e) {
 			;
 		}
-
 	}
 
 	public void ScreenShot() {
@@ -519,10 +502,9 @@ public class method {
 		String hour = Integer.toString(date.get(Calendar.HOUR_OF_DAY));
 		String min = Integer.toString(date.get(Calendar.MINUTE));
 		String sec = Integer.toString(date.get(Calendar.SECOND));
-
 		File screenShotFile = (File) driver.getScreenshotAs(OutputType.FILE);
 		System.out.println("[info] Executing:|ScreenShot|");
-		try {//"C:\\TUTK_QA_TestTool\\TestReport\\"
+		try {
 			FileUtils.copyFile(screenShotFile,
 					new File(TestCase.CaseList.get(CurrentCaseNumber) + "_" + month + day + hour + min + sec + ".jpg"));
 		} catch (IOException e) {
@@ -569,7 +551,6 @@ public class method {
 							|| TestCase.StepList.get(CurrentCaseNumber).get(i).equals("ByXpath_VerifyText")) {
 						state = true;
 						break;
-
 					}
 				}
 				if (!state) {
@@ -577,7 +558,6 @@ public class method {
 					AllResultList.add(ResultList);
 				}
 			}
-
 			System.out.println("");
 		} catch (Exception e) {
 			System.out.println("[Error] Can't quit APP");
@@ -585,7 +565,6 @@ public class method {
 			ResultList.add(false);
 			AllResultList.add(ResultList);
 		}
-
 	}
 
 	public void ResetAPP() {
@@ -659,7 +638,6 @@ public class method {
 			ResultList.add(false);
 			AllResultList.add(ResultList);
 		}
-
 	}
 
 	// // public void Menu() {
@@ -703,7 +681,6 @@ public class method {
 			TouchAction t = new TouchAction(driver);
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			t.longPress(wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(appElemnt)))).perform();
-
 		} catch (Exception e) {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;
@@ -725,7 +702,6 @@ public class method {
 			ResultList.add(false);
 			AllResultList.add(ResultList);
 		}
-
 	}
 
 	// public void ByXpath_Swipe() {

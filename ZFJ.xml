@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <executions>
     		        	<execution>
-				<executionId>637</executionId>	
-				<Cycle>QA test Zephyr training 4</Cycle>	
-				<issueKey>QAM-116</issueKey>
-                <testSummary><![CDATA[[Demo][KalayLightingCam]QuitAPP]]></testSummary>
+				<executionId>642</executionId>	
+				<Cycle>Kalay APP</Cycle>	
+				<issueKey>QAM-111</issueKey>
+                <testSummary><![CDATA[[Kalay APP]Add Device DeviceName Blank]]></testSummary>
 				<labels>  </labels>
 				<Project>QA_Administrative_Management</Project>	
 				<versions>
@@ -19,106 +19,110 @@
 				<executedBy></executedBy>	
 				<executedOn></executedOn>
                                 								<executionDefects></executionDefects>
-				<creationDate>20/Dec/17</creationDate>
+				<creationDate>21/Dec/17</creationDate>
 				<teststeps>
 																		<teststep>
-                                <stepId>2863</stepId>
+                                <stepId>2902</stepId>
 								<orderId>1</orderId>
 								<step><![CDATA[LaunchAPP]]></step>
-								<testData><![CDATA[com.wuunet.warahome, com.wuunet.warahome.SplashScreenActivity,4100432e44c49139,6.0.1]]></testData>
+								<testData><![CDATA[com.tutk.kalayapp,com.tutk.kalayapp.activity.SplashScreenActivity,4100432e44c49139,6.0.1]]></testData>
 								<expectedResult><![CDATA[]]></expectedResult>
 								<stepResult>UNEXECUTED</stepResult>
 								<Comment><![CDATA[]]></Comment>
 							</teststep>
 													<teststep>
-                                <stepId>2864</stepId>
+                                <stepId>2903</stepId>
 								<orderId>2</orderId>
 								<step><![CDATA[Byid_Click]]></step>
-								<testData><![CDATA[com.wuunet.warahome:id/btnMenu]]></testData>
+								<testData><![CDATA[com.tutk.kalayapp:id/bt_add]]></testData>
 								<expectedResult><![CDATA[]]></expectedResult>
 								<stepResult>UNEXECUTED</stepResult>
 								<Comment><![CDATA[]]></Comment>
 							</teststep>
 													<teststep>
-                                <stepId>2865</stepId>
+                                <stepId>2904</stepId>
 								<orderId>3</orderId>
 								<step><![CDATA[Byid_Click]]></step>
-								<testData><![CDATA[com.wuunet.warahome:id/btnExit]]></testData>
+								<testData><![CDATA[com.tutk.kalayapp:id/bt_ipcam]]></testData>
 								<expectedResult><![CDATA[]]></expectedResult>
 								<stepResult>UNEXECUTED</stepResult>
 								<Comment><![CDATA[]]></Comment>
 							</teststep>
 													<teststep>
-                                <stepId>2866</stepId>
+                                <stepId>2905</stepId>
 								<orderId>4</orderId>
-								<step><![CDATA[QuitAPP]]></step>
+								<step><![CDATA[Byid_Click]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/bt_has_router]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2906</stepId>
+								<orderId>5</orderId>
+								<step><![CDATA[Byid_Click]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/bt_manual]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2907</stepId>
+								<orderId>6</orderId>
+								<step><![CDATA[Byid_SendKey]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/uid,E8V7ULYW6ZLBKDZU111A]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2908</stepId>
+								<orderId>7</orderId>
+								<step><![CDATA[Byid_SendKey]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/pwd,888888ii]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2909</stepId>
+								<orderId>8</orderId>
+								<step><![CDATA[Byid_Clear]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/name]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2910</stepId>
+								<orderId>9</orderId>
+								<step><![CDATA[HideKeyboard]]></step>
 								<testData><![CDATA[]]></testData>
 								<expectedResult><![CDATA[]]></expectedResult>
 								<stepResult>UNEXECUTED</stepResult>
 								<Comment><![CDATA[]]></Comment>
 							</teststep>
-															</teststeps>
-			</execution>	
-    	        	<execution>
-				<executionId>633</executionId>	
-				<Cycle>QA test Zephyr training 4</Cycle>	
-				<issueKey>QAM-105</issueKey>
-                <testSummary><![CDATA[[Demo][KalayLightingCam]About]]></testSummary>
-				<labels>  </labels>
-				<Project>QA_Administrative_Management</Project>	
-				<versions>
-															<versionName>Unscheduled</versionName>
-													</versions>	
-				<components>
-								</components>
-				<Priority>High</Priority>
-				               	 	<executionStatus>UNEXECUTED</executionStatus>
-								<Comment><![CDATA[]]></Comment>
-				<assignedTo>Jhih Chen</assignedTo>
-				<executedBy></executedBy>	
-				<executedOn></executedOn>
-                                								<executionDefects></executionDefects>
-				<creationDate>18/Dec/17</creationDate>
-				<teststeps>
-																		<teststep>
-                                <stepId>2858</stepId>
-								<orderId>1</orderId>
-								<step><![CDATA[LaunchAPP]]></step>
-								<testData><![CDATA[com.wuunet.warahome, com.wuunet.warahome.SplashScreenActivity,4100432e44c49139,6.0.1]]></testData>
-								<expectedResult><![CDATA[]]></expectedResult>
-								<stepResult>UNEXECUTED</stepResult>
-								<Comment><![CDATA[]]></Comment>
-							</teststep>
 													<teststep>
-                                <stepId>2859</stepId>
-								<orderId>2</orderId>
+                                <stepId>2911</stepId>
+								<orderId>10</orderId>
 								<step><![CDATA[Byid_Click]]></step>
-								<testData><![CDATA[com.wuunet.warahome:id/btnMenu]]></testData>
+								<testData><![CDATA[com.tutk.kalayapp:id/iv_right]]></testData>
 								<expectedResult><![CDATA[]]></expectedResult>
 								<stepResult>UNEXECUTED</stepResult>
 								<Comment><![CDATA[]]></Comment>
 							</teststep>
 													<teststep>
-                                <stepId>2860</stepId>
-								<orderId>3</orderId>
-								<step><![CDATA[Byid_Click]]></step>
-								<testData><![CDATA[com.wuunet.warahome:id/btnAbout]]></testData>
-								<expectedResult><![CDATA[]]></expectedResult>
-								<stepResult>UNEXECUTED</stepResult>
-								<Comment><![CDATA[]]></Comment>
-							</teststep>
-													<teststep>
-                                <stepId>2868</stepId>
-								<orderId>4</orderId>
+                                <stepId>2912</stepId>
+								<orderId>11</orderId>
 								<step><![CDATA[Byid_VerifyText]]></step>
-								<testData><![CDATA[com.wuunet.warahome:id/tv_title]]></testData>
-								<expectedResult><![CDATA[關於,About,情報]]></expectedResult>
+								<testData><![CDATA[com.tutk.kalayapp:id/tv_msg]]></testData>
+								<expectedResult><![CDATA[请输入所有选项。,請輸入所有選項。,Please fill in all fields.]]></expectedResult>
 								<stepResult>UNEXECUTED</stepResult>
 								<Comment><![CDATA[]]></Comment>
 							</teststep>
 													<teststep>
-                                <stepId>2862</stepId>
-								<orderId>5</orderId>
+                                <stepId>2913</stepId>
+								<orderId>12</orderId>
 								<step><![CDATA[QuitAPP]]></step>
 								<testData><![CDATA[]]></testData>
 								<expectedResult><![CDATA[]]></expectedResult>
