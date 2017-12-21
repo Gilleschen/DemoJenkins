@@ -522,9 +522,9 @@ public class method {
 
 		File screenShotFile = (File) driver.getScreenshotAs(OutputType.FILE);
 		System.out.println("[info] Executing:|ScreenShot|");
-		try {
-			FileUtils.copyFile(screenShotFile, new File("C:\\TUTK_QA_TestTool\\TestReport\\"
-					+ TestCase.CaseList.get(CurrentCaseNumber) + "_" + month + day + hour + min + sec + ".jpg"));
+		try {//"C:\\TUTK_QA_TestTool\\TestReport\\"
+			FileUtils.copyFile(screenShotFile,
+					new File(TestCase.CaseList.get(CurrentCaseNumber) + "_" + month + day + hour + min + sec + ".jpg"));
 		} catch (IOException e) {
 			System.out.println("[Error]Fail to ScreenShot");
 			CommandError = false;

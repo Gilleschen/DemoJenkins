@@ -6,7 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+
 import java.util.List;
 
 import org.junit.Test;
@@ -27,7 +27,8 @@ public class Junit {
 
 	}
 
-	@Parameters(name = "{index}. CaseName:{0}")
+	//@Parameters(name = "{index}. CaseName:{0}")
+	@Parameters(name = "{0}")
 	public static Collection primeNumbers() throws NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, InstantiationException, ClassNotFoundException {
 		method Method = new method();
