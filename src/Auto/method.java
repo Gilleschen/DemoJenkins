@@ -714,8 +714,8 @@ public class method {
 			driver.swipe(p1.x, p1.y, p1.x, p1.y - (p1.y - p2.y), 1000);
 
 		} catch (Exception e) {
-			System.err.print("[Error] Can't find " + appElemnt);
-			System.err.println(" or Can't find " + toElemnt);
+			System.out.print("[Error] Can't find " + appElemnt);
+			System.out.println(" or Can't find " + toElemnt);
 			CommandError = false;
 			ResultList.add(false);
 			AllResultList.add(ResultList);
@@ -734,8 +734,8 @@ public class method {
 			driver.swipe(p1.x, p1.y, p1.x, p1.y - (p1.y - p2.y), 1000);
 
 		} catch (Exception e) {
-			System.err.print("[Error] Can't find " + appElemnt);
-			System.err.println(" or Can't find " + toElemnt);
+			System.out.print("[Error] Can't find " + appElemnt);
+			System.out.println(" or Can't find " + toElemnt);
 			CommandError = false;
 			ResultList.add(false);
 			AllResultList.add(ResultList);
@@ -751,7 +751,7 @@ public class method {
 						"[info] Executing:|Swipe|(" + startx + "," + starty + ")|(" + endx + "," + endy + ")|");
 				driver.swipe(startx, starty, endx, endy, 500);
 			} catch (Exception e) {
-				System.err.println(
+				System.out.println(
 						"[Error] Can't swipe " + "(" + startx + "," + starty + ")" + " to (" + endx + "," + endy + ")");
 				CommandError = false;
 				ResultList.add(false);
@@ -784,7 +784,7 @@ public class method {
 			}
 
 		} catch (Exception w) {
-			System.err.println("[Error] Can't find " + appElemnt);
+			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;
 			ResultList.add(false);
 			AllResultList.add(ResultList);
@@ -816,7 +816,7 @@ public class method {
 			}
 
 		} catch (Exception w) {
-			System.err.println("[Error] Can't find " + appElemnt);
+			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;
 			ResultList.add(false);
 			AllResultList.add(ResultList);
@@ -933,7 +933,7 @@ public class method {
 							.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(appElemntarray)));// 再次取得新targetlist
 
 					if (SearchNumber == 10) {// 搜尋10次都沒找到元件，則跳出for
-						System.err.println("Can't find " + appInput);// 印出找不到
+						System.out.println("Can't find " + appInput);// 印出找不到
 						break;// 跳出for
 					} else {
 						i = -1;// 若SearchNumber!=10，則令i=-1(目的：再次執行for)
@@ -942,9 +942,9 @@ public class method {
 			}
 
 		} catch (Exception w) {
-			System.err.print("[Error] Can't find " + appElemnt);
-			System.err.print(" or [Error] can not find " + appElemntarray);
-			System.err.println(" or [Error] can not find " + appInputXpath);
+			System.out.print("[Error] Can't find " + appElemnt);
+			System.out.print(" or [Error] can not find " + appElemntarray);
+			System.out.println(" or [Error] can not find " + appInputXpath);
 			CommandError = false;
 			ResultList.add(false);
 			AllResultList.add(ResultList);
