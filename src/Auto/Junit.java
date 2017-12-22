@@ -21,7 +21,6 @@ public class Junit {
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
 		this.casename = casename;
 		this.result = result;
-
 	}
 
 	// @Parameters(name = "{index}. CaseName:{0}")
