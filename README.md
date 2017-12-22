@@ -1,1 +1,1 @@
-# Zephyr+Jenkins+Junit測試用
+# 測試 Zephyr+Jenkins+Junit
