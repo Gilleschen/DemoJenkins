@@ -34,7 +34,7 @@ public class LoadExpectResult {
 							if (!eElement.getElementsByTagName("expectedResult").item(j).getTextContent().equals("")) {
 								String testData = eElement.getElementsByTagName("expectedResult").item(j)
 										.getTextContent();
-								testData = testData.replaceAll("\\s+", "");// 移除字串內所有空格
+								//testData = testData.replaceAll("\\s+", "");// 移除字串內所有空格
 								String[] expectedResult = testData.split(",");// 將測試案例加入TargetCaseList矩陣
 								for (int k = 0; k < expectedResult.length; k++) {
 									ResultList.add(expectedResult[k]);

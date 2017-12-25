@@ -52,6 +52,7 @@ public class method {
 	static String element, appPackage, appActivity, deviceName, platformVersion;
 	static int CurrentCaseNumber = -1;// 目前執行到第幾個測試案列
 	static Boolean CommandError;// 判定執行的指令是否出現錯誤；ture為正確；false為錯誤
+	static Boolean VerifiedTextResult;// VerifiedText字串判斷結果；ture為正確；false為錯誤
 	static int CurrentErrorDevice = 0;// 統計目前出錯的設備數量
 	static int CurrentCaseStep;
 
@@ -278,7 +279,7 @@ public class method {
 	}
 
 	public void Byid_VerifyText() {
-		boolean result = false;
+
 		try {
 			System.out.println("[info] Executing:|Byid_VerifyText|" + appElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
@@ -288,13 +289,13 @@ public class method {
 
 			for (int j = 0; j < ExpectResult.ResultList.size(); j++) {
 				if (element.equals(ExpectResult.ResultList.get(j))) {
-					result = true;
+					VerifiedTextResult = true;
 					break;
 				} else {
-					result = false;
+					VerifiedTextResult = false;
 				}
 			}
-			if (result) {
+			if (VerifiedTextResult) {
 				System.out.println("[info] Result_Byid_VerifyText:|PASS|");
 				ResultList.add(true);
 			} else {
@@ -313,7 +314,6 @@ public class method {
 	}
 
 	public void ByXpath_VerifyText() {
-		boolean result = false;
 		try {
 			System.out.println("[info] Executing:|ByXpath_VerifyText|" + appElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
@@ -324,14 +324,14 @@ public class method {
 
 			for (int j = 0; j < ExpectResult.ResultList.size(); j++) {
 				if (element.equals(ExpectResult.ResultList.get(j))) {
-					result = true;
+					VerifiedTextResult = true;
 					break;
 				} else {
-					result = false;
+					VerifiedTextResult = false;
 				}
 			}
 
-			if (result) {
+			if (VerifiedTextResult) {
 				System.out.println("[info] Result_ByXpath_VerifyText:|PASS|");
 				ResultList.add(true);
 			} else {
@@ -535,26 +535,34 @@ public class method {
 	}
 
 	public void QuitAPP() {
+		boolean state = false;
 		try {
 			System.out.println("[info] Executing:|QuitAPP|");
 			driver.quit();
-
-			if (CommandError) {
-				boolean state = false;
-				System.out.println("[Result]" + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":PASS");
-
-				for (int i = 0; i < TestCase.StepList.get(CurrentCaseNumber).size(); i++) {
-					if (TestCase.StepList.get(CurrentCaseNumber).get(i).equals("Byid_VerifyText")
-							|| TestCase.StepList.get(CurrentCaseNumber).get(i).equals("ByXpath_VerifyText")) {
-						state = true;
-						break;
-					}
+			// 確認Step中是否包含ByXpath_VerifyText或Byid_VerifyText
+			for (int i = 0; i < TestCase.StepList.get(CurrentCaseNumber).size(); i++) {
+				if (TestCase.StepList.get(CurrentCaseNumber).get(i).equals("Byid_VerifyText")
+						|| TestCase.StepList.get(CurrentCaseNumber).get(i).equals("ByXpath_VerifyText")) {
+					state = true;// true代表找到ByXpath_VerifyText或Byid_VerifyText
+					break;
 				}
-				if (!state) {
+			}
+
+			if (!state) {
+				if (CommandError) {
+					System.out.println("[Result]" + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":PASS");
 					ResultList.add(true);
 					AllResultList.add(ResultList);
 				}
+
+			} else {
+				if (CommandError && VerifiedTextResult) {
+					System.out.println("[Result]" + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":PASS");
+				} else {
+					System.out.println("[Result]" + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":FAIL");
+				}
 			}
+
 			System.out.println("");
 		} catch (Exception e) {
 			System.out.println("[Error] Can't quit APP");
@@ -562,7 +570,43 @@ public class method {
 			ResultList.add("error");
 			AllResultList.add(ResultList);
 		}
+
 	}
+
+	// public void OLDQuitAPP() {
+	// try {
+	// System.out.println("[info] Executing:|QuitAPP|");
+	// driver.quit();
+	//
+	// if (CommandError) {
+	// boolean state = false;
+	// System.out.println("[Result]" +
+	// TestCase.CaseList.get(CurrentCaseNumber).toString() + ":PASS");
+	//
+	// for (int i = 0; i < TestCase.StepList.get(CurrentCaseNumber).size(); i++)
+	// {
+	// if
+	// (TestCase.StepList.get(CurrentCaseNumber).get(i).equals("Byid_VerifyText")
+	// ||
+	// TestCase.StepList.get(CurrentCaseNumber).get(i).equals("ByXpath_VerifyText"))
+	// {
+	// state = true;
+	// break;
+	// }
+	// }
+	// if (!state) {
+	// ResultList.add(true);
+	// AllResultList.add(ResultList);
+	// }
+	// }
+	// System.out.println("");
+	// } catch (Exception e) {
+	// System.out.println("[Error] Can't quit APP");
+	// CommandError = false;
+	// ResultList.add("error");
+	// AllResultList.add(ResultList);
+	// }
+	// }
 
 	public void ResetAPP() {
 

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <executions>
     		        	<execution>
-				<executionId>637</executionId>	
-				<Cycle>KalayLightingCam_Auto</Cycle>	
-				<issueKey>QAM-116</issueKey>
-                <testSummary><![CDATA[[KalayLightingCam]QuitAPP]]></testSummary>
+				<executionId>655</executionId>	
+				<Cycle>Kalay APP_Auto</Cycle>	
+				<issueKey>QAM-125</issueKey>
+                <testSummary><![CDATA[[Kalay APP]Setting_ChangPassword_NewPasswordAndConfirmPasswordNotMatch]]></testSummary>
 				<labels>  </labels>
 				<Project>QA_Administrative_Management</Project>	
 				<versions>
@@ -19,38 +19,110 @@
 				<executedBy></executedBy>	
 				<executedOn></executedOn>
                                 								<executionDefects></executionDefects>
-				<creationDate>20/Dec/17</creationDate>
+				<creationDate>25/Dec/17</creationDate>
 				<teststeps>
 																		<teststep>
-                                <stepId>2863</stepId>
+                                <stepId>2926</stepId>
 								<orderId>1</orderId>
 								<step><![CDATA[LaunchAPP]]></step>
-								<testData><![CDATA[com.wuunet.warahome, com.wuunet.warahome.SplashScreenActivity,4100432e44c49139,6.0.1]]></testData>
+								<testData><![CDATA[com.tutk.kalayapp,com.tutk.kalayapp.activity.SplashScreenActivity,4100432e44c49139,6.0.1]]></testData>
 								<expectedResult><![CDATA[]]></expectedResult>
 								<stepResult>UNEXECUTED</stepResult>
 								<Comment><![CDATA[]]></Comment>
 							</teststep>
 													<teststep>
-                                <stepId>2864</stepId>
+                                <stepId>2927</stepId>
 								<orderId>2</orderId>
 								<step><![CDATA[Byid_Click]]></step>
-								<testData><![CDATA[com.wuunet.warahome:id/btnMenu2]]></testData>
+								<testData><![CDATA[com.tutk.kalayapp:id/preview]]></testData>
 								<expectedResult><![CDATA[]]></expectedResult>
 								<stepResult>UNEXECUTED</stepResult>
 								<Comment><![CDATA[]]></Comment>
 							</teststep>
 													<teststep>
-                                <stepId>2865</stepId>
+                                <stepId>2928</stepId>
 								<orderId>3</orderId>
-								<step><![CDATA[Byid_Click]]></step>
-								<testData><![CDATA[com.wuunet.warahome:id/btnExit]]></testData>
+								<step><![CDATA[Byid_Wait]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/bt_play]]></testData>
 								<expectedResult><![CDATA[]]></expectedResult>
 								<stepResult>UNEXECUTED</stepResult>
 								<Comment><![CDATA[]]></Comment>
 							</teststep>
 													<teststep>
-                                <stepId>2866</stepId>
+                                <stepId>2929</stepId>
 								<orderId>4</orderId>
+								<step><![CDATA[Byid_Click]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/iv_right]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2930</stepId>
+								<orderId>5</orderId>
+								<step><![CDATA[Byid_Click]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/item_change_pwd]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2931</stepId>
+								<orderId>6</orderId>
+								<step><![CDATA[Byid_SendKey]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/old_pwd,888888ii]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2932</stepId>
+								<orderId>7</orderId>
+								<step><![CDATA[Byid_SendKey]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/new_pwd,888888ii]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2933</stepId>
+								<orderId>8</orderId>
+								<step><![CDATA[Byid_SendKey]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/confirm_pwd,888888ii]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2934</stepId>
+								<orderId>9</orderId>
+								<step><![CDATA[Byid_Click]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/iv_right]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2935</stepId>
+								<orderId>10</orderId>
+								<step><![CDATA[Byid_VerifyText]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/tv_msg]]></testData>
+								<expectedResult><![CDATA[新密码不可以和旧密码相同,新密碼不可以和舊密碼相同,The new password is same as old password.]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2936</stepId>
+								<orderId>11</orderId>
+								<step><![CDATA[ByXpath_Click]]></step>
+								<testData><![CDATA[//*[@class='android.widget.Button']]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2937</stepId>
+								<orderId>12</orderId>
 								<step><![CDATA[QuitAPP]]></step>
 								<testData><![CDATA[]]></testData>
 								<expectedResult><![CDATA[]]></expectedResult>
@@ -60,10 +132,10 @@
 															</teststeps>
 			</execution>	
     	        	<execution>
-				<executionId>633</executionId>	
-				<Cycle>KalayLightingCam_Auto</Cycle>	
-				<issueKey>QAM-105</issueKey>
-                <testSummary><![CDATA[[KalayLightingCam]About]]></testSummary>
+				<executionId>654</executionId>	
+				<Cycle>Kalay APP_Auto</Cycle>	
+				<issueKey>QAM-127</issueKey>
+                <testSummary><![CDATA[[Kalay APP]Setting_ChangPassword_WrongPasswordRule]]></testSummary>
 				<labels>  </labels>
 				<Project>QA_Administrative_Management</Project>	
 				<versions>
@@ -74,51 +146,114 @@
 				<Priority>High</Priority>
 				               	 	<executionStatus>UNEXECUTED</executionStatus>
 								<Comment><![CDATA[]]></Comment>
-				<assignedTo>Jhih Chen</assignedTo>
+				<assignedTo></assignedTo>
 				<executedBy></executedBy>	
 				<executedOn></executedOn>
                                 								<executionDefects></executionDefects>
-				<creationDate>18/Dec/17</creationDate>
+				<creationDate>25/Dec/17</creationDate>
 				<teststeps>
 																		<teststep>
-                                <stepId>2858</stepId>
+                                <stepId>2950</stepId>
 								<orderId>1</orderId>
 								<step><![CDATA[LaunchAPP]]></step>
-								<testData><![CDATA[com.wuunet.warahome, com.wuunet.warahome.SplashScreenActivity,4100432e44c49139,6.0.1]]></testData>
+								<testData><![CDATA[com.tutk.kalayapp,com.tutk.kalayapp.activity.SplashScreenActivity,4100432e44c49139,6.0.1]]></testData>
 								<expectedResult><![CDATA[]]></expectedResult>
 								<stepResult>UNEXECUTED</stepResult>
 								<Comment><![CDATA[]]></Comment>
 							</teststep>
 													<teststep>
-                                <stepId>2859</stepId>
+                                <stepId>2951</stepId>
 								<orderId>2</orderId>
 								<step><![CDATA[Byid_Click]]></step>
-								<testData><![CDATA[com.wuunet.warahome:id/btnMenu]]></testData>
+								<testData><![CDATA[com.tutk.kalayapp:id/preview]]></testData>
 								<expectedResult><![CDATA[]]></expectedResult>
 								<stepResult>UNEXECUTED</stepResult>
 								<Comment><![CDATA[]]></Comment>
 							</teststep>
 													<teststep>
-                                <stepId>2860</stepId>
+                                <stepId>2952</stepId>
 								<orderId>3</orderId>
-								<step><![CDATA[Byid_Click]]></step>
-								<testData><![CDATA[com.wuunet.warahome:id/btnAbout]]></testData>
+								<step><![CDATA[Byid_Wait]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/bt_play]]></testData>
 								<expectedResult><![CDATA[]]></expectedResult>
 								<stepResult>UNEXECUTED</stepResult>
 								<Comment><![CDATA[]]></Comment>
 							</teststep>
 													<teststep>
-                                <stepId>2868</stepId>
+                                <stepId>2953</stepId>
 								<orderId>4</orderId>
-								<step><![CDATA[Byid_VerifyText]]></step>
-								<testData><![CDATA[com.wuunet.warahome:id/tv_title]]></testData>
-								<expectedResult><![CDATA[關於,About,情報]]></expectedResult>
+								<step><![CDATA[Byid_Click]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/iv_right]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
 								<stepResult>UNEXECUTED</stepResult>
 								<Comment><![CDATA[]]></Comment>
 							</teststep>
 													<teststep>
-                                <stepId>2862</stepId>
+                                <stepId>2954</stepId>
 								<orderId>5</orderId>
+								<step><![CDATA[Byid_Click]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/item_change_pwd]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2955</stepId>
+								<orderId>6</orderId>
+								<step><![CDATA[Byid_SendKey]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/old_pwd,888888ii]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2956</stepId>
+								<orderId>7</orderId>
+								<step><![CDATA[Byid_SendKey]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/new_pwd,888]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2957</stepId>
+								<orderId>8</orderId>
+								<step><![CDATA[Byid_SendKey]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/confirm_pwd,888]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2958</stepId>
+								<orderId>9</orderId>
+								<step><![CDATA[Byid_Click]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/iv_right]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2959</stepId>
+								<orderId>10</orderId>
+								<step><![CDATA[Byid_VerifyText]]></step>
+								<testData><![CDATA[com.tutk.kalayapp:id/tv_msg]]></testData>
+								<expectedResult><![CDATA[请输入8到20位英文字母和数字混合密码。,請輸入8到20位英文字母和數字混合密碼。,Please create your password using a mix of letters and numbers between 8 and 20 characters.]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2960</stepId>
+								<orderId>11</orderId>
+								<step><![CDATA[ByXpath_Click]]></step>
+								<testData><![CDATA[//*[@class='android.widget.Button']]]></testData>
+								<expectedResult><![CDATA[]]></expectedResult>
+								<stepResult>UNEXECUTED</stepResult>
+								<Comment><![CDATA[]]></Comment>
+							</teststep>
+													<teststep>
+                                <stepId>2961</stepId>
+								<orderId>12</orderId>
 								<step><![CDATA[QuitAPP]]></step>
 								<testData><![CDATA[]]></testData>
 								<expectedResult><![CDATA[]]></expectedResult>
