@@ -30,7 +30,6 @@ import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 
 public class method {
-	int systemPort = 8200;// System port
 	int port = 4723;// Appium port
 	int device_timeout = 60;// 60sec
 	int command_timeout = 30;// 30sec
@@ -39,7 +38,6 @@ public class method {
 	static ArrayList ResultList = new ArrayList();// 各測試案例的執行結果(一維)
 	static ArrayList<ArrayList> AllResultList = new ArrayList<ArrayList>();// 所有測試案例的執行結果(二維)
 	static AndroidDriver driver;
-	String ErrorList;
 	static String appElemnt;// APP元件名稱
 	static String appInput;// 輸入值
 	static String appInputXpath;// 輸入值的Xpath格式
@@ -53,7 +51,6 @@ public class method {
 	static int CurrentCaseNumber = -1;// 目前執行到第幾個測試案列
 	static Boolean CommandError;// 判定執行的指令是否出現錯誤；ture為正確；false為錯誤
 	static Boolean VerifiedTextResult;// VerifiedText字串判斷結果；ture為正確；false為錯誤
-	static int CurrentErrorDevice = 0;// 統計目前出錯的設備數量
 	static int CurrentCaseStep;
 
 	public ArrayList<ArrayList> method() throws NoSuchMethodException, SecurityException, IllegalAccessException,
@@ -78,11 +75,6 @@ public class method {
 
 				case "LaunchAPP":
 					methodName = "LaunchAPP";
-					appPackage = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
-					appActivity = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 2);
-					deviceName = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 3);
-					platformVersion = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 4);
-					CurrentCaseStep = CurrentCaseStep + 4;
 					break;
 
 				case "Byid_SendKey":
@@ -283,7 +275,9 @@ public class method {
 		try {
 			System.out.println("[info] Executing:|Byid_VerifyText|" + appElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
-			element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(appElemnt))).getText();
+			element = wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)))
+					.getText();
 			// 回傳測試案例清單的名稱給ExpectResult.LoadExpectResult，並存放期望結果至ResultList清單
 			ExpectResult.LoadExpectResult(TestCase.CaseList.get(CurrentCaseNumber).toString());
 
@@ -352,7 +346,8 @@ public class method {
 		try {
 			System.out.println("[info] Executing:|Byid_Wait|" + appElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.id(appElemnt)));
+			wait.until(ExpectedConditions
+					.presenceOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)));
 		} catch (Exception e) {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;// 若找不到指定元件，則設定CommandError=false
@@ -378,7 +373,9 @@ public class method {
 		try {
 			System.out.println("[info] Executing:|Byid_SendKey|" + appElemnt + "|" + appInput + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(appElemnt))).sendKeys(appInput);
+			wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)))
+					.sendKeys(appInput);
 		} catch (Exception e) {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;// 若找不到指定元件，則設定CommandError=false
@@ -404,7 +401,9 @@ public class method {
 		try {
 			System.out.println("[info] Executing:|Byid_Click|" + appElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(appElemnt))).click();
+			wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)))
+					.click();
 		} catch (Exception e) {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;// 若找不到指定元件，則設定CommandError=false
@@ -431,7 +430,9 @@ public class method {
 		try {
 			System.out.println("[info] Executing:|Byid_Clear|" + appElemnt + "|Clear|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(appElemnt))).clear();
+			wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)))
+					.clear();
 		} catch (Exception e) {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;
@@ -554,7 +555,6 @@ public class method {
 					ResultList.add(true);
 					AllResultList.add(ResultList);
 				}
-
 			} else {
 				if (CommandError && VerifiedTextResult) {
 					System.out.println("[Result]" + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":PASS");
@@ -562,7 +562,6 @@ public class method {
 					System.out.println("[Result]" + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":FAIL");
 				}
 			}
-
 			System.out.println("");
 		} catch (Exception e) {
 			System.out.println("[Error] Can't quit APP");
@@ -570,43 +569,7 @@ public class method {
 			ResultList.add("error");
 			AllResultList.add(ResultList);
 		}
-
 	}
-
-	// public void OLDQuitAPP() {
-	// try {
-	// System.out.println("[info] Executing:|QuitAPP|");
-	// driver.quit();
-	//
-	// if (CommandError) {
-	// boolean state = false;
-	// System.out.println("[Result]" +
-	// TestCase.CaseList.get(CurrentCaseNumber).toString() + ":PASS");
-	//
-	// for (int i = 0; i < TestCase.StepList.get(CurrentCaseNumber).size(); i++)
-	// {
-	// if
-	// (TestCase.StepList.get(CurrentCaseNumber).get(i).equals("Byid_VerifyText")
-	// ||
-	// TestCase.StepList.get(CurrentCaseNumber).get(i).equals("ByXpath_VerifyText"))
-	// {
-	// state = true;
-	// break;
-	// }
-	// }
-	// if (!state) {
-	// ResultList.add(true);
-	// AllResultList.add(ResultList);
-	// }
-	// }
-	// System.out.println("");
-	// } catch (Exception e) {
-	// System.out.println("[Error] Can't quit APP");
-	// CommandError = false;
-	// ResultList.add("error");
-	// AllResultList.add(ResultList);
-	// }
-	// }
 
 	public void ResetAPP() {
 
@@ -625,14 +588,16 @@ public class method {
 		CurrentCaseNumber = CurrentCaseNumber + 1;
 		DesiredCapabilities cap = new DesiredCapabilities();
 		cap.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, device_timeout);
-		cap.setCapability(MobileCapabilityType.DEVICE_NAME, deviceName);
-		cap.setCapability(MobileCapabilityType.PLATFORM_VERSION, platformVersion);
-		cap.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, appPackage);
-		cap.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, appActivity);
-		cap.setCapability(MobileCapabilityType.NO_RESET, true);
+		cap.setCapability(MobileCapabilityType.DEVICE_NAME, TestCase.DeviceInformation.deviceName.get(0));// 固定index
+																											// 0
+		cap.setCapability(MobileCapabilityType.PLATFORM_VERSION, TestCase.DeviceInformation.platformVersion.get(0));// 固定index
+																													// 0
+		cap.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, TestCase.DeviceInformation.appPackage);
+		cap.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, TestCase.DeviceInformation.appActivity);
+		cap.setCapability(MobileCapabilityType.NO_RESET, TestCase.DeviceInformation.ResetAPP);
 
 		try {
-			System.out.println("[info] Executing:|LaunchAPP|" + appPackage + "|");
+			System.out.println("[info] Executing:|LaunchAPP|" +  TestCase.DeviceInformation.appPackage + "|");
 			driver = new AndroidDriver<>(new URL("http://127.0.0.1:" + port + "/wd/hub"), cap);
 		} catch (Exception e) {
 			System.out.print("[Error] Can't find Device UDID:" + deviceName);
@@ -694,7 +659,8 @@ public class method {
 		try {
 			System.out.println("[info] Executing:|Byid_invisibility|" + appElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
-			wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id(appElemnt)));
+			wait.until(ExpectedConditions
+					.invisibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)));
 		} catch (Exception e) {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;
@@ -721,7 +687,9 @@ public class method {
 			System.out.println("[info] Executing:|Byid_LongPress|" + appElemnt + "|");
 			TouchAction t = new TouchAction(driver);
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
-			t.longPress(wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(appElemnt)))).perform();
+			t.longPress(wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt))))
+					.perform();
 		} catch (Exception e) {
 			System.out.println("[Error] Can't find " + appElemnt);
 			CommandError = false;
@@ -771,8 +739,12 @@ public class method {
 		try {
 			System.out.println("[info] Executing:|Byid_Swipe|" + appElemnt + "|" + toElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
-			p2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(toElemnt))).getLocation();
-			p1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(appElemnt))).getLocation();
+			p2 = wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + toElemnt)))
+					.getLocation();
+			p1 = wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)))
+					.getLocation();
 			driver.swipe(p1.x, p1.y, p1.x, p1.y - (p1.y - p2.y), 1000);
 
 		} catch (Exception e) {
