@@ -245,9 +245,9 @@ public class method {
 					methodName = "Power";
 					break;
 
-				// case "Menu":
-				// methodName = "Menu";
-				// break;
+				case "Recent":
+					methodName = "Recent";
+					break;
 
 				case "ResetAPP":
 					methodName = "ResetAPP";
@@ -597,7 +597,7 @@ public class method {
 		cap.setCapability(MobileCapabilityType.NO_RESET, TestCase.DeviceInformation.ResetAPP);
 
 		try {
-			System.out.println("[info] Executing:|LaunchAPP|" +  TestCase.DeviceInformation.appPackage + "|");
+			System.out.println("[info] Executing:|LaunchAPP|" + TestCase.DeviceInformation.appPackage + "|");
 			driver = new AndroidDriver<>(new URL("http://127.0.0.1:" + port + "/wd/hub"), cap);
 		} catch (Exception e) {
 			System.out.print("[Error] Can't find Device UDID:" + deviceName);
@@ -646,15 +646,18 @@ public class method {
 		}
 	}
 
-	// // public void Menu() {
-	// // for (int i = 0; i < driver.size(); i++) {
-	// // driver.get(i).pressKeyCode(AndroidKeyCode.MENU);
-	// // driver.get(i).pressKeyCode(82);
-	// // driver.get(i).pressKeyCode(AndroidKeyCode.KEYCODE_MENU);
-	// //
-	// // }
-	// // }
-	//
+	public void Recent() {
+		try {
+			System.out.println("[info] Executing:|Recent|");
+			driver.pressKeyCode(AndroidKeyCode.KEYCODE_APP_SWITCH);
+		} catch (Exception e) {
+			System.err.println("[Error] Can't execute Recent button");
+			CommandError = false;
+			ResultList.add("error");
+			AllResultList.add(ResultList);
+		}
+	}
+
 	public void Byid_invisibility() {
 		try {
 			System.out.println("[info] Executing:|Byid_invisibility|" + appElemnt + "|");
