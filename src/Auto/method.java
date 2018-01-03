@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -22,6 +24,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.google.common.base.Stopwatch;
+
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
@@ -52,7 +57,8 @@ public class method {
 	static Boolean CommandError;// 判定執行的指令是否出現錯誤；ture為正確；false為錯誤
 	static Boolean VerifiedTextResult;// VerifiedText字串判斷結果；ture為正確；false為錯誤
 	static int CurrentCaseStep;
-
+	static long totaltime;//統計所有案例測試時間
+	
 	public ArrayList<ArrayList> method() throws NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, InstantiationException {
 		Object obj = new method();
@@ -60,6 +66,7 @@ public class method {
 		String methodName = null;
 
 		for (int CurrentCase = 0; CurrentCase < TestCase.StepList.size(); CurrentCase++) {
+			Stopwatch timer = Stopwatch.createStarted();// 開始計時
 			System.out.println("[info] CaseName:|" + TestCase.CaseList.get(CurrentCase).toString() + "|");
 			ResultList = new ArrayList();
 			ResultList.add(TestCase.CaseList.get(CurrentCase).toString());
@@ -264,9 +271,12 @@ public class method {
 				method.invoke(c.newInstance());
 
 			}
-
+			System.out.println("(" + timer.stop() + ")");
+			totaltime += timer.elapsed(TimeUnit.SECONDS);
+			System.out.println("");
+			
 		}
-		System.out.println("測試結束!!!!!!!!");
+		System.out.println("測試結束!!!"+"("+totaltime+" s)");
 		return AllResultList;
 	}
 
@@ -551,18 +561,18 @@ public class method {
 
 			if (!state) {
 				if (CommandError) {
-					System.out.println("[Result]" + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":PASS");
+					System.out.print("[Result] " + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":PASS");
 					ResultList.add(true);
 					AllResultList.add(ResultList);
 				}
 			} else {
 				if (CommandError && VerifiedTextResult) {
-					System.out.println("[Result]" + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":PASS");
+					System.out.print("[Result] " + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":PASS");
 				} else {
-					System.out.println("[Result]" + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":FAIL");
+					System.out.print("[Result] " + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":FAIL");
 				}
 			}
-			System.out.println("");
+			// System.out.println("");
 		} catch (Exception e) {
 			System.out.println("[Error] Can't quit APP");
 			CommandError = false;

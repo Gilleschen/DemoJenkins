@@ -4,14 +4,31 @@
 <title>Standard Output from Junit</title>
 </head>
 <body>
-<pre>[info] CaseName:|[Demo][KalayLightingCam]About|
-[info] Executing:|LaunchAPP|com.wuunet.warahome|
-[info] Executing:|Byid_Click|com.wuunet.warahome:id/btnMenu|
-[info] Executing:|Byid_Click|com.wuunet.warahome:id/btnAbout|
-[info] Executing:|Byid_VerifyText|com.wuunet.warahome:id/tv_title|
-[info] Result_Byid_VerifyText:|PASS|
+<pre>測試設備(UDID/Android Version)
+4100432e44c49139/6.0.1
+測試步驟：[[LaunchAPP, Byid_Click, bt_menu, Byid_Click, item_about, ScreenShot, QuitAPP], [LaunchAPP, Byid_Click, bt_device_share, ScreenShot, QuitAPP], [LaunchAPP, Byid_LongPress, preview, ScreenShot, QuitAPP]]
+
+[info] CaseName:|SideMenu|
+[info] Executing:|LaunchAPP|com.tutk.kalayapp|
+[info] Executing:|Byid_Click|bt_menu|
+[info] Executing:|Byid_Click|item_about|
+[info] Executing:|ScreenShot|
 [info] Executing:|QuitAPP|
-[Result][Demo][KalayLightingCam]About:PASS
+[Result]SideMenu:PASS
+
+[info] CaseName:|Device_share|
+[info] Executing:|LaunchAPP|com.tutk.kalayapp|
+[info] Executing:|Byid_Click|bt_device_share|
+[info] Executing:|ScreenShot|
+[info] Executing:|QuitAPP|
+[Result]Device_share:PASS
+
+[info] CaseName:|LongPress_Device|
+[info] Executing:|LaunchAPP|com.tutk.kalayapp|
+[info] Executing:|Byid_LongPress|preview|
+[info] Executing:|ScreenShot|
+[info] Executing:|QuitAPP|
+[Result]LongPress_Device:PASS
 
 測試結束!!!!!!!!
 </pre>

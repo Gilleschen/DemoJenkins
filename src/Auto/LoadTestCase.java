@@ -145,7 +145,7 @@ public class LoadTestCase {
 			System.out.println("Can't find TestTool\\TestScript\\TestScript.xlsm");
 		}
 
-		System.out.println("測試步驟：" + StepList);
+		System.out.println("測試腳本：" + StepList);
 		System.out.println("");
 		// 建立各裝置的Test Report
 //		for (int i = 0; i < DeviceInformation.deviceName.size(); i++) {
