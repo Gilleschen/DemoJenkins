@@ -1,7 +1,8 @@
 # Welcome
 
 #### 使用前須知：
-* 測試腳本撰寫及Appium設定相關說明請參考<a href="https://github.com/Gilleschen/Appium_Auto_Testing_Android">Appium_Auto_Testing_Android</a>
+* 測試腳本撰寫及Appium相關說明請參考<a href="https://github.com/Gilleschen/Appium_Auto_Testing_Android">Appium_Auto_Testing_Android</a>
+* 本專案無法多台裝置序列測試
 
 #### (1) Jenkins設定
 1. 安裝 <a href="https://jenkins-ci.org/">Jenkins</a>
