@@ -51,14 +51,13 @@ public class method {
 	static int iterative;// 畫面滑動次數
 	static String scroll;// 畫面捲動方向
 	static String appElemntarray;// 搜尋的多筆類似元件
-	static String checkVerifyText;// 確認執行QuitAPP前是否執行過VerifyText
 	static String element, appPackage, appActivity, deviceName, platformVersion;
 	static int CurrentCaseNumber = -1;// 目前執行到第幾個測試案列
 	static Boolean CommandError;// 判定執行的指令是否出現錯誤；ture為正確；false為錯誤
-	static Boolean VerifiedTextResult;// VerifiedText字串判斷結果；ture為正確；false為錯誤
+	static Boolean VerifiedResult;// Verified判斷結果；ture為正確；false為錯誤
 	static int CurrentCaseStep;
-	static long totaltime;//統計所有案例測試時間
-	
+	static long totaltime;// 統計所有案例測試時間
+
 	public ArrayList<ArrayList> method() throws NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, InstantiationException {
 		Object obj = new method();
@@ -164,6 +163,18 @@ public class method {
 					CurrentCaseStep = CurrentCaseStep + 1;
 					break;
 
+				case "Byid_VerifyRadioButton":
+					methodName = "Byid_VerifyRadioButton";
+					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
+					CurrentCaseStep = CurrentCaseStep + 1;
+					break;
+
+				case "ByXpath_VerifyRadioButton":
+					methodName = "ByXpath_VerifyRadioButton";
+					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
+					CurrentCaseStep = CurrentCaseStep + 1;
+					break;
+
 				case "Sleep":
 					methodName = "Sleep";
 					appInput = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
@@ -262,7 +273,6 @@ public class method {
 
 				case "QuitAPP":
 					methodName = "QuitAPP";
-					checkVerifyText = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep - 2).toString();
 					break;
 				}
 
@@ -274,9 +284,9 @@ public class method {
 			System.out.println("(" + timer.stop() + ")");
 			totaltime += timer.elapsed(TimeUnit.SECONDS);
 			System.out.println("");
-			
+
 		}
-		System.out.println("測試結束!!!"+"("+totaltime+" s)");
+		System.out.println("測試結束!!!" + "(" + totaltime + " s)");
 		return AllResultList;
 	}
 
@@ -293,13 +303,13 @@ public class method {
 
 			for (int j = 0; j < ExpectResult.ResultList.size(); j++) {
 				if (element.equals(ExpectResult.ResultList.get(j))) {
-					VerifiedTextResult = true;
+					VerifiedResult = true;
 					break;
 				} else {
-					VerifiedTextResult = false;
+					VerifiedResult = false;
 				}
 			}
-			if (VerifiedTextResult) {
+			if (VerifiedResult) {
 				System.out.println("[info] Result_Byid_VerifyText:|PASS|");
 				ResultList.add(true);
 			} else {
@@ -328,14 +338,14 @@ public class method {
 
 			for (int j = 0; j < ExpectResult.ResultList.size(); j++) {
 				if (element.equals(ExpectResult.ResultList.get(j))) {
-					VerifiedTextResult = true;
+					VerifiedResult = true;
 					break;
 				} else {
-					VerifiedTextResult = false;
+					VerifiedResult = false;
 				}
 			}
 
-			if (VerifiedTextResult) {
+			if (VerifiedResult) {
 				System.out.println("[info] Result_ByXpath_VerifyText:|PASS|");
 				ResultList.add(true);
 			} else {
@@ -350,6 +360,57 @@ public class method {
 			AllResultList.add(ResultList);
 		}
 
+	}
+
+	public void Byid_VerifyRadioButton() {
+
+		try {
+			System.out.println("[info] Executing:|Byid_VerifyRadioButton|" + appElemnt + "|");
+			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
+			element = wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)))
+					.getAttribute("checked");
+			if (element.equals("true")) {
+				System.out.println("[info] Byid_VerifyRadioButton:|PASS|");
+				VerifiedResult = true;
+				ResultList.add(VerifiedResult);
+			} else {
+				System.out.println("[info] Byid_VerifyRadioButton:|FAIL|");
+				VerifiedResult = false;
+				ResultList.add(VerifiedResult);
+			}
+			AllResultList.add(ResultList);
+		} catch (Exception e) {
+			System.out.println("[Error] Can't find " + appElemnt);
+			CommandError = false;// 若找不到指定元件，則設定CommandError=false
+			ResultList.add("error");
+			AllResultList.add(ResultList);
+		}
+	}
+
+	public void ByXpath_VerifyRadioButton() {
+
+		try {
+			System.out.println("[info] Executing:|ByXpath_VerifyRadioButton|" + appElemnt + "|");
+			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
+			element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt)))
+					.getAttribute("checked");
+			if (element.equals("true")) {
+				System.out.println("[info] Byid_VerifyRadioButton:|PASS|");
+				VerifiedResult = true;
+				ResultList.add(VerifiedResult);
+			} else {
+				System.out.println("[info] Byid_VerifyRadioButton:|FAIL|");
+				VerifiedResult = false;
+				ResultList.add(VerifiedResult);
+			}
+			AllResultList.add(ResultList);
+		} catch (Exception e) {
+			System.out.println("[Error] Can't find " + appElemnt);
+			CommandError = false;// 若找不到指定元件，則設定CommandError=false
+			ResultList.add("error");
+			AllResultList.add(ResultList);
+		}
 	}
 
 	public void Byid_Wait() {
@@ -553,8 +614,10 @@ public class method {
 			// 確認Step中是否包含ByXpath_VerifyText或Byid_VerifyText
 			for (int i = 0; i < TestCase.StepList.get(CurrentCaseNumber).size(); i++) {
 				if (TestCase.StepList.get(CurrentCaseNumber).get(i).equals("Byid_VerifyText")
-						|| TestCase.StepList.get(CurrentCaseNumber).get(i).equals("ByXpath_VerifyText")) {
-					state = true;// true代表找到ByXpath_VerifyText或Byid_VerifyText
+						|| TestCase.StepList.get(CurrentCaseNumber).get(i).equals("ByXpath_VerifyText")
+						|| TestCase.StepList.get(CurrentCaseNumber).get(i).equals("Byid_VerifyRadioButton")
+						|| TestCase.StepList.get(CurrentCaseNumber).get(i).equals("ByXpath_VerifyRadioButton")) {
+					state = true;// true代表找到ByXpath_VerifyText或Byid_VerifyText或ByXpath_VerifyRadioButton或Byid_VerifyRadioButton
 					break;
 				}
 			}
@@ -566,7 +629,7 @@ public class method {
 					AllResultList.add(ResultList);
 				}
 			} else {
-				if (CommandError && VerifiedTextResult) {
+				if (CommandError && VerifiedResult) {
 					System.out.print("[Result] " + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":PASS");
 				} else {
 					System.out.print("[Result] " + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":FAIL");
