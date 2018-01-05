@@ -2,6 +2,7 @@
 
 #### 使用前須知：
 * 測試腳本撰寫及Appium相關設定請參考<a href="https://github.com/Gilleschen/Appium_Auto_Testing_Android">Appium_Auto_Testing_Android</a>
+
 * 本專案無法支援多台裝置序列測試
 
 #### (1) Jenkins設定
@@ -26,3 +27,9 @@
 5. 建置後動作：Publish test result to Zephyr for JIRA
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/zephyr_2.PNG)
 6. 儲存
+
+#### 備註：
+
+* Appium Client Libraries Version: java-client-5.0.0-BETA9
+* Selenium Client Version: 3.4.0
+
