@@ -23,4 +23,4 @@
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/junit.PNG)
 5. 建置後動作：Publish test result to Zephyr for JIRA
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/zephyr_2.PNG)
-
+6. 儲存
