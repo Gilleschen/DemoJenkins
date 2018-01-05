@@ -21,7 +21,7 @@ public class LoadDeviceInformation {
 
 		try {
 
-			workBook = new XSSFWorkbook(new FileInputStream("TestTool\\TestScript\\TestScript.xlsm"));// hard
+			workBook = new XSSFWorkbook(new FileInputStream("C:\\TUTK_QA_TestTool\\TestTool\\TestScript.xlsm"));// hard
 			// code
 			Sheet = workBook.getSheet("APP&Device");// hard code
 			deviceName = new ArrayList<String>();
@@ -68,7 +68,7 @@ public class LoadDeviceInformation {
 			workBook.close();
 
 		} catch (Exception e) {
-			System.out.println("Can't find TestTool\\TestScript\\TestScript.xlsm");
+			System.out.println("Can't find C:\\TUTK_QA_TestTool\\TestTool\\TestScript.xlsm");
 		}
 	}
 

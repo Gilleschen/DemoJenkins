@@ -16,7 +16,7 @@ public class LoadExpectResult {
 		XSSFSheet sheet;
 
 		try {
-			workbook = new XSSFWorkbook(new FileInputStream("TestTool\\TestScript\\TestScript.xlsm"));
+			workbook = new XSSFWorkbook(new FileInputStream("C:\\TUTK_QA_TestTool\\TestTool\\TestScript.xlsm"));
 			sheet = workbook.getSheet("ExpectResult");// hard code
 			ResultList = new ArrayList<String>();
 			int i = 1;
@@ -41,7 +41,7 @@ public class LoadExpectResult {
 
 			workbook.close();
 		} catch (IOException e) {
-			System.out.println("Can't find TestTool\\TestScript\\TestScript.xlsm");
+			System.out.println("Can't find C:\\TUTK_QA_TestTool\\TestTool\\TestScript.xlsm");
 		}
 	}
 

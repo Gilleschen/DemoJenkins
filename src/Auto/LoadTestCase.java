@@ -123,7 +123,7 @@ public class LoadTestCase {
 		XSSFSheet sheet, APPDeviceSheet;
 
 		try {
-			workbook = new XSSFWorkbook(new FileInputStream("TestTool\\TestScript\\TestScript.xlsm"));
+			workbook = new XSSFWorkbook(new FileInputStream("C:\\TUTK_QA_TestTool\\TestTool\\TestScript.xlsm"));
 
 			CaseList = new ArrayList<String>();
 			StepList = new ArrayList<ArrayList<String>>();
@@ -142,42 +142,11 @@ public class LoadTestCase {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Can't find TestTool\\TestScript\\TestScript.xlsm");
+			System.out.println("Can't find C:\\TUTK_QA_TestTool\\TestTool\\TestScript.xlsm");
 		}
 
 		System.out.println("測試腳本：" + StepList);
 		System.out.println("");
-		// 建立各裝置的Test Report
-//		for (int i = 0; i < DeviceInformation.deviceName.size(); i++) {
-//
-//			if (DeviceInformation.deviceName.get(i).toString().length() > 20) {// Excel工作表名稱最常31字元因，故需判斷UDID長度是否大於31
-//				char[] NewUdid = new char[20];// 因需包含_TestReport字串(共11字元)，故設定20位字元陣列(31-11)
-//				DeviceInformation.deviceName.get(i).toString().getChars(0, 20, NewUdid, 0);// 取出UDID前20字元給NewUdid
-//				sheet = workbook.createSheet(String.valueOf(NewUdid) + "_TestReport");// 使用NewUdid命名新工作表
-//			} else {
-//				sheet = workbook.createSheet(DeviceInformation.deviceName.get(i).toString() + "_TestReport");
-//			}
-//
-//			sheet.createRow(0).createCell(0).setCellValue("CaseName");
-//			sheet.getRow(0).createCell(1).setCellValue("Result");
-//			for (int k = 0; k < CaseList.size(); k++) {
-//				sheet.createRow(k + 1).createCell(0).setCellValue(CaseList.get(k).toString());// 填入各案例名稱
-//				sheet.getRow(k + 1).createCell(1).setCellValue("Error");// 預設各案列結果為Error
-//
-//			}
-//		}
-		// 執行寫入Excel後的存檔動作
-//		FileOutputStream out;
-//		try {
-//			out = new FileOutputStream(new File("TestTool\\TestReport\\TestReport.xlsm"));// 另存新檔
-//			workbook.write(out);
-//			out.close();
-//			workbook.close();
-//		} catch (Exception e) {
-//			System.out.println("Can't find TestTool\\TestReport\\TestReport.xlsm");;
-//		}
-//
 	}
-
 
 }
