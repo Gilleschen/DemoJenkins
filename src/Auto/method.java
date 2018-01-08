@@ -31,6 +31,7 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
+import io.appium.java_client.android.Connection;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 
@@ -52,6 +53,7 @@ public class method {
 	static String scroll;// 畫面捲動方向
 	static String appElemntarray;// 搜尋的多筆類似元件
 	static String element, appPackage, appActivity, deviceName, platformVersion;
+	static String switchWiFi;// 啟動wifi或關閉wifi
 	static int CurrentCaseNumber = -1;// 目前執行到第幾個測試案列
 	static Boolean CommandError;// 判定執行的指令是否出現錯誤；ture為正確；false為錯誤
 	static Boolean VerifiedResult;// Verified判斷結果；ture為正確；false為錯誤
@@ -163,13 +165,13 @@ public class method {
 					CurrentCaseStep = CurrentCaseStep + 1;
 					break;
 
-				case "Byid_VerifyRadioButton":
+				case "Byid_VerifyRadioButton":// 僅適用於能區分checked屬性的元件
 					methodName = "Byid_VerifyRadioButton";
 					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
 					CurrentCaseStep = CurrentCaseStep + 1;
 					break;
 
-				case "ByXpath_VerifyRadioButton":
+				case "ByXpath_VerifyRadioButton":// 僅適用於能區分checked屬性的元件
 					methodName = "ByXpath_VerifyRadioButton";
 					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
 					CurrentCaseStep = CurrentCaseStep + 1;
@@ -267,6 +269,12 @@ public class method {
 					methodName = "Recent";
 					break;
 
+				case "WiFi":
+					methodName = "WiFi";
+					switchWiFi = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
+					CurrentCaseStep = CurrentCaseStep + 1;
+					break;
+
 				case "ResetAPP":
 					methodName = "ResetAPP";
 					break;
@@ -362,6 +370,7 @@ public class method {
 
 	}
 
+	// 僅適用於能區分checked屬性的元件
 	public void Byid_VerifyRadioButton() {
 
 		try {
@@ -388,6 +397,7 @@ public class method {
 		}
 	}
 
+	// 僅適用於能區分checked屬性的元件
 	public void ByXpath_VerifyRadioButton() {
 
 		try {
@@ -611,7 +621,7 @@ public class method {
 		try {
 			System.out.println("[info] Executing:|QuitAPP|");
 			driver.quit();
-			// 確認Step中是否包含ByXpath_VerifyText或Byid_VerifyText
+			// 確認Step中是否包含ByXpath_VerifyText或Byid_VerifyText或Byid_VerifyRadioButton或ByXpath_VerifyRadioButton
 			for (int i = 0; i < TestCase.StepList.get(CurrentCaseNumber).size(); i++) {
 				if (TestCase.StepList.get(CurrentCaseNumber).get(i).equals("Byid_VerifyText")
 						|| TestCase.StepList.get(CurrentCaseNumber).get(i).equals("ByXpath_VerifyText")
@@ -729,6 +739,37 @@ public class method {
 			ResultList.add("error");
 			AllResultList.add(ResultList);
 		}
+	}
+
+	public void WiFi() {
+
+		try {
+			System.out.println("[info] Executing:|WiFi|" + switchWiFi + "|");
+			// if邏輯說明:(目的避免已開啟wifi或已關閉wif了，又再次執行令啟動wifi或關閉wif(皆去除if判斷僅跑switch流程)，如此可節省測試時間)
+			// [判斷手機連線狀態為WiFi off及data off(皆NONE) &&
+			// Excel指令為On時，才執行switch之Case"On"]
+			// ||[[判斷手機連線狀態為WiFi on || WiFi及Data都啟動(皆ALL)] &&
+			// Excel指令為Off時，才執行switch之Case"Off"]
+
+			if ((driver.getConnection().toString().equals("NONE") && switchWiFi.equals("On"))
+					|| ((driver.getConnection().toString().equals("ALL")
+							|| driver.getConnection().toString().equals("WIFI")) && switchWiFi.equals("Off"))) {
+				switch (switchWiFi) {
+				case "On":
+					driver.setConnection(Connection.WIFI);
+					break;
+				case "Off":
+					driver.setConnection(Connection.NONE);
+					break;
+				}
+			}
+		} catch (Exception e) {
+			System.err.println("[Error] Can't Turn " + switchWiFi + " WiFi");
+			CommandError = false;
+			ResultList.add("error");
+			AllResultList.add(ResultList);
+		}
+
 	}
 
 	public void Byid_invisibility() {

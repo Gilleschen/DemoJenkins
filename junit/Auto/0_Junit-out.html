@@ -5,32 +5,18 @@
 </head>
 <body>
 <pre>測試設備(UDID/Android Version)
-4100432e44c49139/6.0.1
-測試步驟：[[LaunchAPP, Byid_Click, bt_menu, Byid_Click, item_about, ScreenShot, QuitAPP], [LaunchAPP, Byid_Click, bt_device_share, ScreenShot, QuitAPP], [LaunchAPP, Byid_LongPress, preview, ScreenShot, QuitAPP]]
+4d00ba0a7fd64003/5.0.1
+測試腳本：[[LaunchAPP, WiFi, On, ByXpath_Click, //*[@text='OK'], Byid_Wait, preview, QuitAPP]]
 
-[info] CaseName:|SideMenu|
+[info] CaseName:|WiFi|
 [info] Executing:|LaunchAPP|com.tutk.kalayapp|
-[info] Executing:|Byid_Click|bt_menu|
-[info] Executing:|Byid_Click|item_about|
-[info] Executing:|ScreenShot|
+[info] Executing:|WiFi|On|
+[info] Executing:|ByXpath_Click|//*[@text='OK']|
+[info] Executing:|Byid_Wait|preview|
 [info] Executing:|QuitAPP|
-[Result]SideMenu:PASS
+[Result] WiFi:PASS(1.822 min)
 
-[info] CaseName:|Device_share|
-[info] Executing:|LaunchAPP|com.tutk.kalayapp|
-[info] Executing:|Byid_Click|bt_device_share|
-[info] Executing:|ScreenShot|
-[info] Executing:|QuitAPP|
-[Result]Device_share:PASS
-
-[info] CaseName:|LongPress_Device|
-[info] Executing:|LaunchAPP|com.tutk.kalayapp|
-[info] Executing:|Byid_LongPress|preview|
-[info] Executing:|ScreenShot|
-[info] Executing:|QuitAPP|
-[Result]LongPress_Device:PASS
-
-測試結束!!!!!!!!
+測試結束!!!(109 s)
 </pre>
 </body>
 </html>
