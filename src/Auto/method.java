@@ -168,13 +168,15 @@ public class method {
 				case "Byid_VerifyRadioButton":// 僅適用於能區分checked屬性的元件
 					methodName = "Byid_VerifyRadioButton";
 					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
-					CurrentCaseStep = CurrentCaseStep + 1;
+					appInput = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 2);
+					CurrentCaseStep = CurrentCaseStep + 2;
 					break;
 
 				case "ByXpath_VerifyRadioButton":// 僅適用於能區分checked屬性的元件
 					methodName = "ByXpath_VerifyRadioButton";
 					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
-					CurrentCaseStep = CurrentCaseStep + 1;
+					appInput = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 2);
+					CurrentCaseStep = CurrentCaseStep + 2;
 					break;
 
 				case "Sleep":
@@ -374,12 +376,12 @@ public class method {
 	public void Byid_VerifyRadioButton() {
 
 		try {
-			System.out.println("[info] Executing:|Byid_VerifyRadioButton|" + appElemnt + "|");
+			System.out.println("[info] Executing:|Byid_VerifyRadioButton|" + appElemnt + "|" + appInput + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			element = wait.until(ExpectedConditions
 					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)))
 					.getAttribute("checked");
-			if (element.equals("true")) {
+			if (element.equalsIgnoreCase(appInput)) {
 				System.out.println("[info] Byid_VerifyRadioButton:|PASS|");
 				VerifiedResult = true;
 				ResultList.add(VerifiedResult);
@@ -401,11 +403,11 @@ public class method {
 	public void ByXpath_VerifyRadioButton() {
 
 		try {
-			System.out.println("[info] Executing:|ByXpath_VerifyRadioButton|" + appElemnt + "|");
+			System.out.println("[info] Executing:|ByXpath_VerifyRadioButton|" + appElemnt + "|" + appInput + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt)))
 					.getAttribute("checked");
-			if (element.equals("true")) {
+			if (element.equalsIgnoreCase(appInput)) {
 				System.out.println("[info] Byid_VerifyRadioButton:|PASS|");
 				VerifiedResult = true;
 				ResultList.add(VerifiedResult);
@@ -645,7 +647,7 @@ public class method {
 					System.out.print("[Result] " + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":FAIL");
 				}
 			}
-			// System.out.println("");
+
 		} catch (Exception e) {
 			System.out.println("[Error] Can't quit APP");
 			CommandError = false;
