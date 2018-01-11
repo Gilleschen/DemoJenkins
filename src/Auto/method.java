@@ -26,7 +26,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.google.common.base.Stopwatch;
-
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
@@ -284,6 +283,10 @@ public class method {
 				case "QuitAPP":
 					methodName = "QuitAPP";
 					break;
+
+				case "Customized":
+					methodName = "Customized";
+					break;
 				}
 
 				Method method;
@@ -298,6 +301,17 @@ public class method {
 		}
 		System.out.println("´ú¸Õµ²§ô!!!" + "(" + totaltime + " s)");
 		return AllResultList;
+	}
+
+	public void Customized() {
+
+		Customized custom = new Customized(driver);
+		if (!custom.Customized_Method()) {
+
+			ResultList.add("error");
+			AllResultList.add(ResultList);
+		}
+
 	}
 
 	public void Byid_VerifyText() {
