@@ -25,7 +25,7 @@ public class Customized {
 
 			wait = new WebDriverWait(driver, 30);
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.id("com.tutk.kalayapp:id/iv_right"))).click();
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.id("com.tutk.kalayapp:id/'item_change_pwd"))).click();;
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.id("com.tutk.kalayapp:id/item_change_pwd"))).click();;
 
 			/* 以上請撰寫客製化程式 */
 			CommandError = true;
