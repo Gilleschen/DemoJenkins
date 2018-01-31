@@ -64,7 +64,7 @@ public class method {
 		Object obj = new method();
 		Class c = obj.getClass();
 		String methodName = null;
-
+		InitialLaunchAPP();// 啟動Appium Session
 		for (int CurrentCase = 0; CurrentCase < TestCase.StepList.size(); CurrentCase++) {
 			Stopwatch timer = Stopwatch.createStarted();// 開始計時
 			System.out.println("[info] CaseName:|" + TestCase.CaseList.get(CurrentCase).toString() + "|");
@@ -299,6 +299,7 @@ public class method {
 			System.out.println("");
 
 		}
+		InitialQuitAPP();// 關閉Appium Session
 		System.out.println("測試結束!!!" + "(" + totaltime + " s)");
 		return AllResultList;
 	}
@@ -568,45 +569,50 @@ public class method {
 	}
 
 	public void Sleep() {
-		String NewString = "";// 新字串
-		char[] r = { '.' };// 小數點字元
-		char[] c = appInput.toCharArray();// 將字串轉成字元陣列
-		for (int i = 0; i < c.length; i++) {
-			if (c[i] != r[0]) {// 判斷字元是否為小數點
-				NewString = NewString + c[i];// 否，將字元組合成新字串
-			} else {
-				break;// 是，跳出迴圈
-			}
-		}
+//		String NewString = "";// 新字串
+//		char[] r = { '.' };// 小數點字元
+//		char[] c = appInput.toCharArray();// 將字串轉成字元陣列
+//		for (int i = 0; i < c.length; i++) {
+//			if (c[i] != r[0]) {// 判斷字元是否為小數點
+//				NewString = NewString + c[i];// 否，將字元組合成新字串
+//			} else {
+//				break;// 是，跳出迴圈
+//			}
+//		}
 
 		try {
 
-			System.out.println("[info] Executing:|Sleep|" + NewString + " second..." + "|");
-			Thread.sleep(Integer.valueOf(NewString) * 1000);// 將字串轉成整數
-
-		} catch (Exception e) {
-			;
+			System.out.println("[info] Executing:|Sleep|" + appInput + " second..." + "|");
+			Thread.sleep((long) (Float.valueOf(appInput) * 1000));
+			//Thread.sleep(Integer.valueOf(NewString) * 1000);// 將字串轉成整數
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
 	public void ScreenShot() {
 
-		Calendar date = Calendar.getInstance();
-		String month = Integer.toString(date.get(Calendar.MONTH) + 1);
-		String day = Integer.toString(date.get(Calendar.DAY_OF_MONTH));
-		String hour = Integer.toString(date.get(Calendar.HOUR_OF_DAY));
-		String min = Integer.toString(date.get(Calendar.MINUTE));
-		String sec = Integer.toString(date.get(Calendar.SECOND));
-		File screenShotFile = (File) driver.getScreenshotAs(OutputType.FILE);
-		System.out.println("[info] Executing:|ScreenShot|");
 		try {
-			FileUtils.copyFile(screenShotFile,
-					new File(TestCase.CaseList.get(CurrentCaseNumber) + "_" + month + day + hour + min + sec + ".jpg"));
+			System.out.println("[info] Executing:|ScreenShot|");
+			Calendar date = Calendar.getInstance();
+			String month = Integer.toString(date.get(Calendar.MONTH) + 1);
+			String day = Integer.toString(date.get(Calendar.DAY_OF_MONTH));
+			String hour = Integer.toString(date.get(Calendar.HOUR_OF_DAY));
+			String min = Integer.toString(date.get(Calendar.MINUTE));
+			String sec = Integer.toString(date.get(Calendar.SECOND));
+			File screenShotFile = (File) driver.getScreenshotAs(OutputType.FILE);
+			FileUtils.copyFile(screenShotFile, new File("C:\\TUTK_QA_TestTool\\TestReport\\"
+					+ TestCase.CaseList.get(CurrentCaseNumber) + "_" + month + day + hour + min + sec + ".jpg"));
 		} catch (IOException e) {
 			System.out.println("[Error]Fail to ScreenShot");
 			CommandError = false;
 			ResultList.add("error");
 			AllResultList.add(ResultList);
+
 		}
 	}
 
@@ -632,11 +638,21 @@ public class method {
 		}
 	}
 
+	public void InitialQuitAPP() {
+		boolean state = false;
+		try {
+			System.out.println("[info] Executing:|End Session|");
+			driver.quit();
+		} catch (Exception e) {
+			System.err.println("[Error] Can't end session");
+		}
+	}
+
 	public void QuitAPP() {
 		boolean state = false;
 		try {
 			System.out.println("[info] Executing:|QuitAPP|");
-			driver.quit();
+			driver.closeApp();
 			// 確認Step中是否包含ByXpath_VerifyText或Byid_VerifyText或Byid_VerifyRadioButton或ByXpath_VerifyRadioButton
 			for (int i = 0; i < TestCase.StepList.get(CurrentCaseNumber).size(); i++) {
 				if (TestCase.StepList.get(CurrentCaseNumber).get(i).equals("Byid_VerifyText")
@@ -663,11 +679,12 @@ public class method {
 			}
 
 		} catch (Exception e) {
-			System.out.println("[Error] Can't quit APP");
+			System.out.println("[Error] Can't close APP");
 			CommandError = false;
 			ResultList.add("error");
 			AllResultList.add(ResultList);
 		}
+
 	}
 
 	public void ResetAPP() {
@@ -683,8 +700,7 @@ public class method {
 		}
 	}
 
-	public void LaunchAPP() {
-		CurrentCaseNumber = CurrentCaseNumber + 1;
+	public void InitialLaunchAPP() {
 		DesiredCapabilities cap = new DesiredCapabilities();
 		cap.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, device_timeout);
 		cap.setCapability(MobileCapabilityType.DEVICE_NAME, TestCase.DeviceInformation.deviceName.get(0));// 固定index
@@ -694,17 +710,35 @@ public class method {
 		cap.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, TestCase.DeviceInformation.appPackage);
 		cap.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, TestCase.DeviceInformation.appActivity);
 		cap.setCapability(MobileCapabilityType.NO_RESET, TestCase.DeviceInformation.ResetAPP);
+		cap.setCapability("autoLaunch", false); // 不啟動APP
 
 		try {
-			System.out.println("[info] Executing:|LaunchAPP|" + TestCase.DeviceInformation.appPackage + "|");
+			System.out.println("[info] Executing:|Create New Session|");
+			System.out.println("");
 			driver = new AndroidDriver<>(new URL("http://127.0.0.1:" + port + "/wd/hub"), cap);
 		} catch (Exception e) {
-			System.out.print("[Error] Can't find Device UDID:" + deviceName);
-			System.out.println(" or can not find appPackage: " + appPackage);
+			System.out.println("[Error] Can't create new session");
+			// System.out.print(" or can not find Device UDID:" + deviceName);
+			// System.out.println(" or can not find appPackage: " + appPackage);
 			CommandError = false;
 			ResultList.add("error");
 			AllResultList.add(ResultList);
 		}
+	}
+
+	public void LaunchAPP() {
+
+		CurrentCaseNumber = CurrentCaseNumber + 1;
+		try {
+			System.out.println("[info] Executing:|LaunchAPP|" + TestCase.DeviceInformation.appPackage + "|");
+			driver.launchApp();
+		} catch (Exception e) {
+			System.err.print("[Error] Can't launch APP");
+			CommandError = false;
+			ResultList.add("error");
+			AllResultList.add(ResultList);
+		}
+
 	}
 
 	public void Back() {
@@ -917,7 +951,9 @@ public class method {
 			System.out.println(
 					"[info] Executing:|ByXpath_Swipe_Vertical|" + appElemnt + "|" + scroll + "|" + iterative + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
-			e = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt)));
+			// e =
+			// wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt)));
+			e = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(appElemnt)));
 			s = e.getSize();
 			p = e.getLocation();
 			int errorX = (int) Math.round(s.width * 0.01);
