@@ -1,6 +1,8 @@
 package Auto;
 
 import static org.junit.Assert.*;
+
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +28,7 @@ public class Junit {
 	// @Parameters(name = "{index}. CaseName:{0}")
 	@Parameters(name = "{0}")
 	public static Collection primeNumbers() throws NoSuchMethodException, SecurityException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException, InstantiationException, ClassNotFoundException {
+			IllegalArgumentException, InvocationTargetException, InstantiationException, ClassNotFoundException, IOException {
 		method Method = new method();
 		ArrayList<ArrayList> ResultList = Method.method();
 		Object obj[][] = new Object[ResultList.size()][ResultList.get(0).size()];

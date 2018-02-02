@@ -1,18 +1,25 @@
 package Auto;
 
+import static java.time.Duration.ofSeconds;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
@@ -21,6 +28,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -33,6 +41,7 @@ import io.appium.java_client.android.AndroidKeyCode;
 import io.appium.java_client.android.Connection;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
+import io.appium.java_client.touch.WaitOptions;
 
 public class method {
 	int port = 4723;// Appium port
@@ -60,7 +69,7 @@ public class method {
 	static long totaltime;// 統計所有案例測試時間
 
 	public ArrayList<ArrayList> method() throws NoSuchMethodException, SecurityException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException, InstantiationException {
+			IllegalArgumentException, InvocationTargetException, InstantiationException, IOException {
 		Object obj = new method();
 		Class c = obj.getClass();
 		String methodName = null;
@@ -74,8 +83,7 @@ public class method {
 			for (int CurrentCaseStep = 0; CurrentCaseStep < TestCase.StepList.get(CurrentCase)
 					.size(); CurrentCaseStep++) {
 				if (!CommandError) {
-					System.out.println("[Result]" + TestCase.CaseList.get(CurrentCase).toString() + ":ERROR!");
-					System.out.println("");
+					System.out.print("[Result]" + TestCase.CaseList.get(CurrentCase).toString() + ":ERROR!");
 					break;// 若目前測試案例出現CommandError=false，則跳出目前案例並執行下一個案例
 				}
 				switch (TestCase.StepList.get(CurrentCase).get(CurrentCaseStep).toString()) {
@@ -304,18 +312,95 @@ public class method {
 		return AllResultList;
 	}
 
-	public void Customized() {
+	public void ErrorCheck(Object... elements) throws IOException {
+		// 當APP閃退後, driver.getCurrentPackage為null
+		if (driver.getCurrentPackage() != null) {
+			if (elements.length > 1) {
+				// APP畫面上找不到指定元件
+				String APPElement = "";
+				int i = 0;
+				for (Object element : elements) {
+					APPElement = APPElement + element;
+					if (i != (elements.length - 1)) {// 判斷是否處理到最後一個element
+						APPElement = APPElement + " or ";// 組成" A元件 or B元件 or
+															// C元件"字串
+					}
+					i++;
+				}
+				System.err.println("[Error] Can't find " + APPElement + " on screen.");
+			} else {
+				for (Object element : elements) {
+					if (element.equals("On")) {
+						System.err.println("[Error] Can't turn on WiFi.");
+					} else if (element.equals("Off")) {
+						System.err.println("[Error] Can't turn off WiFi.");
+					} else if (element.equals("HideKeyboard")) {
+						System.err.println("[Error] Can't hide keyboard.");
+					} else if (element.equals("Sleep")) {
+						System.err.println("[Error] Fail to sleep.");
+					} else if (element.equals("ScreenShot")) {
+						System.err.println("[Error] Fail to ScreenShot.");
+					} else if (element.equals("Portrait")) {
+						System.err.println("[Error] Can't rotate to portrait.");
+					} else if (element.equals("Landscape")) {
+						System.err.println("[Error] Can't rotate to landscape.");
+					} else if (element.equals("InitialQuitAPP")) {
+						System.err.println("[Error] Can't end session.");
+					} else if (element.equals("QuitAPP")) {
+						System.err.println("[Error] Can't close APP.");
+					} else if (element.equals("ResetAPP")) {
+						System.err.println("[Error] Can't reset APP.");
+					} else if (element.equals("InitialLaunchAPP")) {
+						System.err.println("[Error] Can't create new session.");
+					} else if (element.equals("LaunchAPP")) {
+						System.err.print("[Error] Can't launch APP.");
+					} else if (element.equals("BACK") || element.equals("Home") || element.equals("Power")
+							|| element.equals("Recent")) {
+						System.err.println("[Error] Can't execute " + element + " button.");
+					} else if (element.equals("Customized")) {
+						System.err.println("[Error] Can't execute Customized_Method.");
+					} else {
+						System.err.println("[Error] Can't find " + element + " on screen.");
+					}
+				}
+			}
+		} else {
+			// APP Crash 閃退
+			System.err.println("[Error] APP quit unexpectedly.");
+			logcat();// 收集閃退logcat
+		}
+		CommandError = false;// 設定CommandError=false
+		ResultList.add("error");
+		AllResultList.add(ResultList);
+	}
+
+	public void logcat() throws IOException {
+		// 收集閃退log
+		System.out.println("[info] Saving device log...");
+		DateFormat df = new SimpleDateFormat("yyyy_MM_dd_HH-mm-ss");
+		Date today = Calendar.getInstance().getTime();
+		String reportDate = df.format(today);
+
+		List<LogEntry> logEntries = driver.manage().logs().get("logcat").filter(Level.ALL);
+		FileWriter fw = new FileWriter("C:\\TUTK_QA_TestTool\\TestReport\\"
+				+ TestCase.CaseList.get(CurrentCaseNumber).toString() + "_" + reportDate + "_log" + ".txt");
+		for (int i = 0; i < logEntries.size(); i++) {
+			fw.write(logEntries.get(i).toString() + "\n");
+		}
+		fw.flush();
+		fw.close();
+		System.out.println("[info] Saving device log - Done.");
+	}
+
+	public void Customized() throws IOException {
 
 		Customized custom = new Customized(driver);
 		if (!custom.Customized_Method()) {
-
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck("Customized");
 		}
-
 	}
 
-	public void Byid_VerifyText() {
+	public void Byid_VerifyText() throws IOException {
 
 		try {
 			System.out.println("[info] Executing:|Byid_VerifyText|" + appElemnt + "|");
@@ -343,16 +428,12 @@ public class method {
 			}
 			AllResultList.add(ResultList);
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;// 若找不到指定元件，則設定CommandError=false
-			ResultList.add("error");
-			AllResultList.add(ResultList);
-
+			ErrorCheck(appElemnt);
 		}
 
 	}
 
-	public void ByXpath_VerifyText() {
+	public void ByXpath_VerifyText() throws IOException {
 		try {
 			System.out.println("[info] Executing:|ByXpath_VerifyText|" + appElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
@@ -379,16 +460,13 @@ public class method {
 			}
 			AllResultList.add(ResultList);
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;// 若找不到指定元件，則設定CommandError=false
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt);
 		}
 
 	}
 
 	// 僅適用於能區分checked屬性的元件
-	public void Byid_VerifyRadioButton() {
+	public void Byid_VerifyRadioButton() throws IOException {
 
 		try {
 			System.out.println("[info] Executing:|Byid_VerifyRadioButton|" + appElemnt + "|" + appInput + "|");
@@ -407,15 +485,12 @@ public class method {
 			}
 			AllResultList.add(ResultList);
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;// 若找不到指定元件，則設定CommandError=false
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt);
 		}
 	}
 
 	// 僅適用於能區分checked屬性的元件
-	public void ByXpath_VerifyRadioButton() {
+	public void ByXpath_VerifyRadioButton() throws IOException {
 
 		try {
 			System.out.println("[info] Executing:|ByXpath_VerifyRadioButton|" + appElemnt + "|" + appInput + "|");
@@ -433,41 +508,32 @@ public class method {
 			}
 			AllResultList.add(ResultList);
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;// 若找不到指定元件，則設定CommandError=false
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt);
 		}
 	}
 
-	public void Byid_Wait() {
+	public void Byid_Wait() throws IOException {
 		try {
 			System.out.println("[info] Executing:|Byid_Wait|" + appElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)));
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;// 若找不到指定元件，則設定CommandError=false
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt);
 		}
 	}
 
-	public void ByXpath_Wait() {
+	public void ByXpath_Wait() throws IOException {
 		try {
 			System.out.println("[info] Executing:|ByXpath_Wait|" + appElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(appElemnt)));
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;// 若找不到指定元件，則設定CommandError=false
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt);
 		}
 	}
 
-	public void Byid_SendKey() {
+	public void Byid_SendKey() throws IOException {
 		try {
 			System.out.println("[info] Executing:|Byid_SendKey|" + appElemnt + "|" + appInput + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
@@ -475,55 +541,44 @@ public class method {
 					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)))
 					.sendKeys(appInput);
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;// 若找不到指定元件，則設定CommandError=false
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt);
 		}
 	}
 
-	public void ByXpath_SendKey() {
+	public void ByXpath_SendKey() throws IOException {
 		try {
 			System.out.println("[info] Executing:|ByXpath_SendKey|" + appElemnt + "|" + appInput + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt))).sendKeys(appInput);
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;// 若找不到指定元件，則設定CommandError=false
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt);
 		}
 	}
 
-	public void Byid_Click() {
+	public void Byid_Click() throws IOException {
 		try {
 			System.out.println("[info] Executing:|Byid_Click|" + appElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			wait.until(ExpectedConditions
 					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)))
 					.click();
+			// wait.until(ExpectedConditions.presenceOfElementLocated(By.id("com.tutk.kalayapp:id/preview"))).click();
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;// 若找不到指定元件，則設定CommandError=false
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt);
 		}
 	}
 
-	public void ByXpath_Click() {
+	public void ByXpath_Click() throws IOException {
 		try {
 			System.out.println("[info] Executing:|ByXpath_Click|" + appElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt))).click();
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;// 若找不到指定元件，則設定CommandError=false
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt);
 		}
 	}
 
-	public void Byid_Clear() {
+	public void Byid_Clear() throws IOException {
 
 		try {
 			System.out.println("[info] Executing:|Byid_Clear|" + appElemnt + "|Clear|");
@@ -532,69 +587,54 @@ public class method {
 					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)))
 					.clear();
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt);
 		}
 	}
 
-	public void ByXpath_Clear() {
+	public void ByXpath_Clear() throws IOException {
 
 		try {
 			System.out.println("[info] Executing:|ByXpath_Clear|" + appElemnt + "|Clear|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt))).clear();
-
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;// 若找不到指定元件，則設定CommandError=false
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt);
 		}
 	}
 
-	public void HideKeyboard() {
+	public void HideKeyboard() throws IOException {
 		try {
 			if (driver.isKeyboardShown()) {
 				System.out.println("[info] Executing:|HideKeyboard|");
 				driver.hideKeyboard();
 			}
 		} catch (Exception e) {
-			System.out.println("[Error] Can't hide keyboard");
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck("HideKeyboard");
 		}
 	}
 
-	public void Sleep() {
-//		String NewString = "";// 新字串
-//		char[] r = { '.' };// 小數點字元
-//		char[] c = appInput.toCharArray();// 將字串轉成字元陣列
-//		for (int i = 0; i < c.length; i++) {
-//			if (c[i] != r[0]) {// 判斷字元是否為小數點
-//				NewString = NewString + c[i];// 否，將字元組合成新字串
-//			} else {
-//				break;// 是，跳出迴圈
-//			}
-//		}
+	public void Sleep() throws IOException {
+		// String NewString = "";// 新字串
+		// char[] r = { '.' };// 小數點字元
+		// char[] c = appInput.toCharArray();// 將字串轉成字元陣列
+		// for (int i = 0; i < c.length; i++) {
+		// if (c[i] != r[0]) {// 判斷字元是否為小數點
+		// NewString = NewString + c[i];// 否，將字元組合成新字串
+		// } else {
+		// break;// 是，跳出迴圈
+		// }
+		// }
 
 		try {
-
 			System.out.println("[info] Executing:|Sleep|" + appInput + " second..." + "|");
 			Thread.sleep((long) (Float.valueOf(appInput) * 1000));
-			//Thread.sleep(Integer.valueOf(NewString) * 1000);// 將字串轉成整數
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// Thread.sleep(Integer.valueOf(NewString) * 1000);// 將字串轉成整數
+		} catch (Exception e) {
+			ErrorCheck("Sleep");
 		}
 	}
 
-	public void ScreenShot() {
+	public void ScreenShot() throws IOException {
 
 		try {
 			System.out.println("[info] Executing:|ScreenShot|");
@@ -608,16 +648,11 @@ public class method {
 			FileUtils.copyFile(screenShotFile, new File("C:\\TUTK_QA_TestTool\\TestReport\\"
 					+ TestCase.CaseList.get(CurrentCaseNumber) + "_" + month + day + hour + min + sec + ".jpg"));
 		} catch (IOException e) {
-			System.out.println("[Error]Fail to ScreenShot");
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
-
+			ErrorCheck("ScreenShot");
 		}
 	}
 
-	public void Orientation() {
-
+	public void Orientation() throws IOException {
 		try {
 			if (appInput.equals("Landscape")) {
 				System.out.println("[info] Executing:|Orientation|Landscape|");
@@ -628,27 +663,24 @@ public class method {
 			}
 		} catch (Exception e) {
 			if (appInput.equals("Landscape")) {
-				System.out.println("[Error] Can't rotate to landscape");
+				ErrorCheck("Landscape");
 			} else {
-				System.out.println("[Error] Can't rotate to portrait");
+				ErrorCheck("Portrait");
 			}
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
 		}
 	}
 
-	public void InitialQuitAPP() {
+	public void InitialQuitAPP() throws IOException {
 		boolean state = false;
 		try {
 			System.out.println("[info] Executing:|End Session|");
 			driver.quit();
 		} catch (Exception e) {
-			System.err.println("[Error] Can't end session");
+			ErrorCheck("InitialQuitAPP");
 		}
 	}
 
-	public void QuitAPP() {
+	public void QuitAPP() throws IOException {
 		boolean state = false;
 		try {
 			System.out.println("[info] Executing:|QuitAPP|");
@@ -663,7 +695,6 @@ public class method {
 					break;
 				}
 			}
-
 			if (!state) {
 				if (CommandError) {
 					System.out.print("[Result] " + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":PASS");
@@ -677,30 +708,23 @@ public class method {
 					System.out.print("[Result] " + TestCase.CaseList.get(CurrentCaseNumber).toString() + ":FAIL");
 				}
 			}
-
 		} catch (Exception e) {
-			System.out.println("[Error] Can't close APP");
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck("QuitAPP");
 		}
 
 	}
 
-	public void ResetAPP() {
+	public void ResetAPP() throws IOException {
 
 		try {
 			System.out.println("[info] Executing:|ResetAPP|");
 			driver.resetApp();
 		} catch (Exception e) {
-			System.out.println("[Error] Can't reset APP");
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck("ResetAPP");
 		}
 	}
 
-	public void InitialLaunchAPP() {
+	public void InitialLaunchAPP() throws IOException {
 		DesiredCapabilities cap = new DesiredCapabilities();
 		cap.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, device_timeout);
 		cap.setCapability(MobileCapabilityType.DEVICE_NAME, TestCase.DeviceInformation.deviceName.get(0));// 固定index
@@ -717,81 +741,58 @@ public class method {
 			System.out.println("");
 			driver = new AndroidDriver<>(new URL("http://127.0.0.1:" + port + "/wd/hub"), cap);
 		} catch (Exception e) {
-			System.out.println("[Error] Can't create new session");
-			// System.out.print(" or can not find Device UDID:" + deviceName);
-			// System.out.println(" or can not find appPackage: " + appPackage);
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck("InitialLaunchAPP");
 		}
 	}
 
-	public void LaunchAPP() {
+	public void LaunchAPP() throws IOException {
 
 		CurrentCaseNumber = CurrentCaseNumber + 1;
 		try {
 			System.out.println("[info] Executing:|LaunchAPP|" + TestCase.DeviceInformation.appPackage + "|");
 			driver.launchApp();
 		} catch (Exception e) {
-			System.err.print("[Error] Can't launch APP");
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck("LaunchAPP");
 		}
-
 	}
 
-	public void Back() {
+	public void Back() throws IOException {
 		try {
 			System.out.println("[info] Executing:|Back|");
 			driver.pressKeyCode(AndroidKeyCode.BACK);
 		} catch (Exception e) {
-			System.out.println("[Error] Can't execute Back button");
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck("Back");
 		}
-
 	}
 
-	public void Home() {
+	public void Home() throws IOException {
 		try {
 			System.out.println("[info] Executing:|Home|");
 			driver.pressKeyCode(AndroidKeyCode.HOME);
 		} catch (Exception e) {
-			System.out.println("[Error] Can't execute Home button");
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck("Home");
 		}
-
 	}
 
-	public void Power() {
+	public void Power() throws IOException {
 		try {
 			System.out.println("[info] Executing:|Power|");
 			driver.pressKeyCode(AndroidKeyCode.KEYCODE_POWER);
 		} catch (Exception e) {
-			System.out.println("[Error] Can't execute Power button");
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck("Power");
 		}
 	}
 
-	public void Recent() {
+	public void Recent() throws IOException {
 		try {
 			System.out.println("[info] Executing:|Recent|");
 			driver.pressKeyCode(AndroidKeyCode.KEYCODE_APP_SWITCH);
 		} catch (Exception e) {
-			System.err.println("[Error] Can't execute Recent button");
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck("Recent");
 		}
 	}
 
-	public void WiFi() {
+	public void WiFi() throws IOException {
 
 		try {
 			System.out.println("[info] Executing:|WiFi|" + switchWiFi + "|");
@@ -814,42 +815,40 @@ public class method {
 				}
 			}
 		} catch (Exception e) {
-			System.err.println("[Error] Can't Turn " + switchWiFi + " WiFi");
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			switch (switchWiFi) {
+			case "On":
+				ErrorCheck("On");
+				break;
+			case "Off":
+				ErrorCheck("Off");
+				break;
+			}
 		}
 
 	}
 
-	public void Byid_invisibility() {
+	public void Byid_invisibility() throws IOException {
 		try {
 			System.out.println("[info] Executing:|Byid_invisibility|" + appElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			wait.until(ExpectedConditions
 					.invisibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)));
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt);
 		}
 	}
 
-	public void ByXpath_invisibility() {
+	public void ByXpath_invisibility() throws IOException {
 		try {
 			System.out.println("[info] Executing:|ByXpath_invisibility|" + appElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(appElemnt)));
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt);
 		}
 	}
 
-	public void Byid_LongPress() {
+	public void Byid_LongPress() throws IOException {
 		try {
 			System.out.println("[info] Executing:|Byid_LongPress|" + appElemnt + "|");
 			TouchAction t = new TouchAction(driver);
@@ -858,91 +857,71 @@ public class method {
 					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt))))
 					.perform();
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt);
 		}
 	}
 
-	public void ByXpath_LongPress() {
+	public void ByXpath_LongPress() throws IOException {
 		try {
 			System.out.println("[info] Executing:|ByXpath_LongPress|" + appElemnt + "|");
 			TouchAction t = new TouchAction(driver);
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			t.longPress(wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt)))).perform();
-
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt);
 		}
 	}
 
-	public void ByXpath_Swipe() {
+	public void ByXpath_Swipe() throws IOException {
 		Point p1, p2;// p1 為起點;p2為終點
 
 		try {
 			System.out.println("[info] Executing:|ByXpath_Swipe|" + appElemnt + "|" + toElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
-			p2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(toElemnt))).getLocation();
-			p1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt))).getLocation();
-			driver.swipe(p1.x, p1.y, p1.x, p1.y - (p1.y - p2.y), 1000);
+			TouchAction t = new TouchAction(driver);
+			WebElement ele2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(toElemnt)));
+			WebElement ele1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt)));
+			t.press(ele1).waitAction(WaitOptions.waitOptions(ofSeconds(1))).moveTo(ele2).release().perform();
 
 		} catch (Exception e) {
-			System.out.print("[Error] Can't find " + appElemnt);
-			System.out.println(" or Can't find " + toElemnt);
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt, toElemnt);
 		}
-
 	}
 
-	public void Byid_Swipe() {
+	public void Byid_Swipe() throws IOException {
 		Point p1, p2;// p1 為起點;p2為終點
 
 		try {
 			System.out.println("[info] Executing:|Byid_Swipe|" + appElemnt + "|" + toElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
-			p2 = wait.until(ExpectedConditions
-					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + toElemnt)))
-					.getLocation();
-			p1 = wait.until(ExpectedConditions
-					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)))
-					.getLocation();
-			driver.swipe(p1.x, p1.y, p1.x, p1.y - (p1.y - p2.y), 1000);
-
+			TouchAction t = new TouchAction(driver);
+			WebElement ele2 = wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + toElemnt)));
+			WebElement ele1 = wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)));
+			t.press(ele1).waitAction(WaitOptions.waitOptions(ofSeconds(1))).moveTo(ele2).release().perform();
 		} catch (Exception e) {
-			System.out.print("[Error] Can't find " + appElemnt);
-			System.out.println(" or Can't find " + toElemnt);
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt, toElemnt);
 		}
-
 	}
 
-	public void Swipe() {
+	public void Swipe() throws IOException {
 
 		for (int j = 0; j < iterative; j++) {
 			try {
 				System.out.println(
 						"[info] Executing:|Swipe|(" + startx + "," + starty + ")|(" + endx + "," + endy + ")|");
-				driver.swipe(startx, starty, endx, endy, 500);
+				TouchAction t = new TouchAction(driver);
+				t.press(startx, starty).waitAction(WaitOptions.waitOptions(ofSeconds(1))).moveTo(endx, endy).release()
+						.perform();
 			} catch (Exception e) {
-				System.out.println(
-						"[Error] Can't swipe " + "(" + startx + "," + starty + ")" + " to (" + endx + "," + endy + ")");
-				CommandError = false;
-				ResultList.add("error");
-				AllResultList.add(ResultList);
+				ErrorCheck(startx, starty, endx, endy);
 				break;// 出錯後，離開iterative回圈
 			}
 		}
 	}
 
-	public void ByXpath_Swipe_Vertical() {
+	public void ByXpath_Swipe_Vertical() throws IOException {
 		Point p;// 元件座標
 		Dimension s;// 元件大小
 		WebElement e;
@@ -950,32 +929,34 @@ public class method {
 		try {
 			System.out.println(
 					"[info] Executing:|ByXpath_Swipe_Vertical|" + appElemnt + "|" + scroll + "|" + iterative + "|");
+			TouchAction t = new TouchAction(driver);
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
+			//
+			e = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt)));
 			// e =
-			// wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt)));
-			e = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(appElemnt)));
+			// wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(appElemnt)));
 			s = e.getSize();
 			p = e.getLocation();
 			int errorX = (int) Math.round(s.width * 0.01);
 			int errorY = (int) Math.round(s.height * 0.01);
 			for (int j = 0; j < iterative; j++) {
+
 				if (scroll.equals("DOWN")) {// 畫面向下捲動
-					driver.swipe(p.x + errorX, p.y + s.height - errorY, p.x + errorX, p.y + errorY, 1000);
+					t.press(p.x + errorX, p.y + s.height - errorY).waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+							.moveTo(p.x + errorX, p.y + errorY).release().perform();
+
 				} else if (scroll.equals("UP")) {// 畫面向上捲動
-					driver.swipe(p.x + errorX, p.y + errorY, p.x + errorX, p.y + s.height - errorY, 1000);
+					t.press(p.x + errorX, p.y + errorY).waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+							.moveTo(p.x + errorX, p.y + s.height - errorY).release().perform();
 				}
 			}
 
 		} catch (Exception w) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
-
+			ErrorCheck(appElemnt);
 		}
 	}
 
-	public void ByXpath_Swipe_Horizontal() {
+	public void ByXpath_Swipe_Horizontal() throws IOException {
 		Point p;// 元件座標
 		Dimension s;// 元件大小
 		WebElement e;
@@ -983,31 +964,30 @@ public class method {
 		try {
 			System.out.println(
 					"[info] Executing:|ByXpath_Swipe_Horizontal|" + appElemnt + "|" + scroll + "|" + iterative + "|");
+			TouchAction t = new TouchAction(driver);
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			e = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt)));
-			// e = driver.get(i).findElement(By.xpath(appElemnt));
 			s = e.getSize();
 			p = e.getLocation();
 			int errorX = (int) Math.round(s.getWidth() * 0.01);
 			int errorY = (int) Math.round(s.getHeight() * 0.01);
 			for (int j = 0; j < iterative; j++) {
+
 				if (scroll.equals("RIGHT")) {// 畫面向右捲動 (觀看畫面左方內容)
-					driver.swipe(p.x + errorX, p.y + errorY, p.x + s.width - errorX, p.y + errorY, 1000);
+					t.press(p.x + errorX, p.y + errorY).waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+							.moveTo(p.x + s.width - errorX, p.y + errorY).release().perform();
 				} else if (scroll.equals("LEFT")) {// 畫面向左捲動 (觀看畫面右方內容)
-					driver.swipe(p.x + s.width - errorX, p.y + errorY, p.x + errorX, p.y + errorY, 1000);
+					t.press(p.x + s.width - errorX, p.y + errorY).waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+							.moveTo(p.x + errorX, p.y + errorY).release().perform();
 				}
 			}
-
 		} catch (Exception w) {
-			System.out.println("[Error] Can't find " + appElemnt);
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt);
 		}
 	}
 
 	// ByXpath_Swipe_FindText_Click_Android缺點：1.搜尋的字串不可重複 2.搜尋5次都沒找到元件，則停止搜尋
-	public void ByXpath_Swipe_FindText_Click_Android() {
+	public void ByXpath_Swipe_FindText_Click_Android() throws IOException {
 
 		int SearchNumber = 0;// 搜尋次數
 		Point ScrollBarP;// 卷軸元件座標
@@ -1018,6 +998,7 @@ public class method {
 			System.out.println("[info] Executing:|ByXpath_Swipe_FindText_Click_Android|" + appElemnt + "|" + scroll
 					+ "|" + appElemntarray + "|" + appInput + "|" + appInputXpath + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
+			TouchAction t = new TouchAction(driver);
 			ScrollBar = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt)));// 卷軸元件
 			ScrollBarS = ScrollBar.getSize();// 卷軸元件的長及寬
 			ScrollBarP = ScrollBar.getLocation();// 卷軸的座標
@@ -1040,41 +1021,60 @@ public class method {
 
 					case "DOWN":
 						if (targetElementP.y > ScrollBarP.y + ScrollBarS.height) {// 若搜尋元件的y座標大於卷軸範圍，表示搜尋元件全部UI被卷軸遮住
-							driver.swipe(targetElementP.x, ScrollBarS.height + ScrollBarP.y - errorY, targetElementP.x,
-									ScrollBarP.y + errorY, 1000);
+							t.press(targetElementP.x, ScrollBarS.height + ScrollBarP.y - errorY)
+									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.moveTo(targetElementP.x, ScrollBarP.y + errorY).release().perform();
+
 						} else if (targetElementP.y + targetElementS.height == ScrollBarP.y + ScrollBarS.height) {// 若搜尋元件的y座標與寬度總和等於卷軸長度，表示搜尋元件的部分UI被卷軸遮住
-							driver.swipe(targetElementP.x - errorY, targetElementP.y, targetElementP.x,
-									ScrollBarP.y + errorY, 1000);
+
+							t.press(targetElementP.x - errorY, targetElementP.y)
+									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.moveTo(targetElementP.x, ScrollBarP.y + errorY).release().perform();
+
 						}
 						break;
 
 					case "UP":
 						if (targetElementP.y + targetElementS.height < ScrollBarP.y) {// 若搜尋元件的最大y座標小於卷軸y座標，表示搜尋元件全部UI被卷軸遮住
-							driver.swipe(targetElementP.x, ScrollBarP.y + errorY, targetElementP.x,
-									ScrollBarS.height + ScrollBarP.y - errorY, 1000);
+							t.press(targetElementP.x, ScrollBarP.y + errorY)
+									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.moveTo(targetElementP.x, ScrollBarS.height + ScrollBarP.y - errorY).release()
+									.perform();
+
 						} else {// 反之，若搜尋元件的最大y座標大於卷軸y座標，表示搜尋元件全部UI被卷軸遮住
-							driver.swipe(targetElementP.x, ScrollBarP.y + errorY, targetElementP.x,
-									ScrollBarP.y + ScrollBarS.height - errorY, 1000);
+							t.press(targetElementP.x, ScrollBarP.y + errorY)
+									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.moveTo(targetElementP.x, ScrollBarP.y + ScrollBarS.height - errorY).release()
+									.perform();
+
 						}
 						break;
 
 					case "LEFT":// 畫面向左捲動(觀看畫面右方內容)
 						if (targetElementP.x > ScrollBarP.x + ScrollBarS.width) {// 若搜尋元件的x座標大於卷軸範圍，表示搜尋元件全部UI被卷軸遮住
-							driver.swipe(ScrollBarP.x + ScrollBarS.width - errorX, targetElementP.y,
-									ScrollBarP.x + errorX, targetElementP.y, 1000);
+							t.press(ScrollBarP.x + ScrollBarS.width - errorX, targetElementP.y)
+									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.moveTo(ScrollBarP.x + errorX, targetElementP.y).release().perform();
+
 						} else if (targetElementP.x + targetElementS.width == ScrollBarP.x + ScrollBarS.width) {// 若搜尋元件的x座標與寬度總和等於卷軸寬度，表示搜尋元件的部分UI被卷軸遮住
-							driver.swipe(targetElementP.x - errorX, targetElementP.y, ScrollBarP.x + errorX,
-									targetElementP.y, 1000);
+							t.press(targetElementP.x - errorX, targetElementP.y)
+									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.moveTo(ScrollBarP.x + errorX, targetElementP.y).release().perform();
+
 						}
 						break;
 
 					case "RIGHT":// 畫面向右捲動(觀看畫面左方內容)
 						if (targetElementP.x + targetElementS.width < ScrollBarP.x) {// 若搜尋元件的最大x座標小於卷軸x座標，表示搜尋元件全部UI被卷軸遮住
-							driver.swipe(ScrollBarP.x + errorX, targetElementP.y,
-									ScrollBarP.x + ScrollBarS.width - errorX, targetElementP.y, 1000);
+							t.press(ScrollBarP.x + errorX, targetElementP.y)
+									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.moveTo(ScrollBarP.x + ScrollBarS.width - errorX, targetElementP.y).release()
+									.perform();
 						} else if (targetElementP.x == ScrollBarP.x) {// 若搜尋元件的x座標等於卷軸x座標，可能表示搜尋元件的部分UI被卷軸遮住
-							driver.swipe(targetElementP.x + targetElementS.width + errorX, targetElementP.y,
-									ScrollBarP.x + ScrollBarS.width - errorX, targetElementP.y, 1000);
+							t.press(targetElementP.x + targetElementS.width + errorX, targetElementP.y)
+									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.moveTo(ScrollBarP.x + ScrollBarS.width - errorX, targetElementP.y).release()
+									.perform();
 						}
 						break;
 					}
@@ -1088,23 +1088,29 @@ public class method {
 					switch (scroll.toString()) {
 
 					case "DOWN":
-						driver.swipe(ScrollBarP.x + errorX, ScrollBarP.y + ScrollBarS.height - errorY,
-								ScrollBarP.x + errorX, ScrollBarP.y + errorY, 1000);// 向下捲動
+						t.press(ScrollBarP.x + errorX, ScrollBarP.y + ScrollBarS.height - errorY)
+								.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+								.moveTo(ScrollBarP.x + errorX, ScrollBarP.y + errorY).release().perform();// 向下捲動
 						break;
 
 					case "UP":
-						driver.swipe(ScrollBarP.x + errorX, ScrollBarP.y + errorY, ScrollBarP.x + errorX,
-								ScrollBarP.y + ScrollBarS.height - errorY, 1000);// 向上捲動
+						t.press(ScrollBarP.x + errorX, ScrollBarP.y + errorY)
+								.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+								.moveTo(ScrollBarP.x + errorX, ScrollBarP.y + ScrollBarS.height - errorY).release()
+								.perform();// 向上捲動
 						break;
 
 					case "LEFT":
-						driver.swipe(ScrollBarP.x + ScrollBarS.width - errorX, ScrollBarP.y + errorY,
-								ScrollBarP.x + errorX, ScrollBarP.y + errorY, 1000);// 畫面向左捲動(觀看畫面右方內容)
+						t.press(ScrollBarP.x + ScrollBarS.width - errorX, ScrollBarP.y + errorY)
+								.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+								.moveTo(ScrollBarP.x + errorX, ScrollBarP.y + errorY).release().perform();// 畫面向左捲動(觀看畫面右方內容)
 						break;
 
 					case "RIGHT":
-						driver.swipe(ScrollBarP.x + errorX, ScrollBarP.y + errorY,
-								ScrollBarP.x + ScrollBarS.width - errorX, ScrollBarP.y + errorY, 1000);// 畫面向右捲動(觀看畫面左方內容)
+						t.press(ScrollBarP.x + errorX, ScrollBarP.y + errorY)
+								.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+								.moveTo(ScrollBarP.x + ScrollBarS.width - errorX, ScrollBarP.y + errorY).release()
+								.perform();// 畫面向右捲動(觀看畫面左方內容)
 						break;
 
 					}
@@ -1114,7 +1120,7 @@ public class method {
 							.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(appElemntarray)));// 再次取得新targetlist
 
 					if (SearchNumber == 10) {// 搜尋10次都沒找到元件，則跳出for
-						System.out.println("Can't find " + appInput);// 印出找不到
+						System.out.println("[Error] Search 10 time can not find " + appInput);// 印出找不到
 						break;// 跳出for
 					} else {
 						i = -1;// 若SearchNumber!=10，則令i=-1(目的：再次執行for)
@@ -1123,12 +1129,7 @@ public class method {
 			}
 
 		} catch (Exception w) {
-			System.out.print("[Error] Can't find " + appElemnt);
-			System.out.print(" or [Error] can not find " + appElemntarray);
-			System.out.println(" or [Error] can not find " + appInputXpath);
-			CommandError = false;
-			ResultList.add("error");
-			AllResultList.add(ResultList);
+			ErrorCheck(appElemnt, appElemntarray, appInputXpath);
 		}
 	}
 

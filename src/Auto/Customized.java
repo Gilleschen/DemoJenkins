@@ -11,7 +11,6 @@ public class Customized {
 	WebDriverWait wait;
 	boolean CommandError;// hard code
 
-	
 	public Customized(AndroidDriver driver) {
 		this.driver = driver;// hard code
 	}
@@ -21,8 +20,8 @@ public class Customized {
 		try {
 			System.out.println("[info] Executing:|Customized_Method|");// hard
 																		// code
-			/* 由method.java傳入AndroidDriver, 變數命名為driver*/
-			/*以下請撰寫程式 */
+			/* 由method.java傳入AndroidDriver, 變數命名為driver */
+			/* 以下請撰寫程式 */
 			// 範例
 			wait = new WebDriverWait(driver, 30);
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.id("com.tutk.kalayapp:id/iv_right"))).click();
@@ -33,8 +32,6 @@ public class Customized {
 			CommandError = true;// hard code
 
 		} catch (Exception e) {
-			System.err.println("[Error] Can't Execute Customized_Method ");// hard
-																			// code
 			CommandError = false;// hard code
 		}
 		return CommandError;// hard code
