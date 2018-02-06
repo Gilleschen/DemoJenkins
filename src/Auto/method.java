@@ -45,7 +45,7 @@ import io.appium.java_client.touch.WaitOptions;
 
 public class method {
 	int port = 4723;// Appium port
-	int device_timeout = 60;// 60sec
+	int device_timeout = 120;// 120sec
 	int command_timeout = 30;// 30sec
 	LoadExpectResult ExpectResult = new LoadExpectResult();
 	static LoadTestCase TestCase = new LoadTestCase();
@@ -1129,7 +1129,7 @@ public class method {
 			}
 
 		} catch (Exception w) {
-			ErrorCheck(appElemnt, appElemntarray, appInputXpath);
+			ErrorCheck(appElemnt, appInput, appElemntarray, appInputXpath);
 		}
 	}
 
