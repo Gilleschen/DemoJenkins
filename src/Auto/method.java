@@ -376,20 +376,25 @@ public class method {
 
 	public void logcat() throws IOException {
 		// ¦¬¶°°{°hlog
-		System.out.println("[info] Saving device log...");
+		// System.out.println("[info] Saving device log...");
 		DateFormat df = new SimpleDateFormat("yyyy_MM_dd_HH-mm-ss");
 		Date today = Calendar.getInstance().getTime();
 		String reportDate = df.format(today);
 
 		List<LogEntry> logEntries = driver.manage().logs().get("logcat").filter(Level.ALL);
-		FileWriter fw = new FileWriter("C:\\TUTK_QA_TestTool\\TestReport\\"
-				+ TestCase.CaseList.get(CurrentCaseNumber).toString() + "_" + reportDate + "_log" + ".txt");
-		for (int i = 0; i < logEntries.size(); i++) {
-			fw.write(logEntries.get(i).toString() + "\n");
+		try {
+			FileWriter fw = new FileWriter("C:\\TUTK_QA_TestTool\\TestReport\\"
+					+ TestCase.CaseList.get(CurrentCaseNumber).toString() + "_" + reportDate + "_log" + ".txt");
+			for (int i = 0; i < logEntries.size(); i++) {
+				fw.write(logEntries.get(i).toString() + "\n");
+			}
+			fw.flush();
+			fw.close();
+			System.out.println("[info] Saving device log - Done.");
+		} catch (Exception e) {
+			System.err.println("[Error] Fail to save device log.");
 		}
-		fw.flush();
-		fw.close();
-		System.out.println("[info] Saving device log - Done.");
+
 	}
 
 	public void Customized() throws IOException {
