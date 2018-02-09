@@ -306,6 +306,9 @@ public class method {
 	}
 
 	public void ErrorCheck(Object... elements) throws IOException {
+		DateFormat df = new SimpleDateFormat("MMM dd, yyyy h:mm:ss a");
+		Date today = Calendar.getInstance().getTime();
+		String reportDate = df.format(today);
 
 		if (elements.length > 1) {
 			// APP畫面上找不到指定元件
@@ -319,44 +322,44 @@ public class method {
 				}
 				i++;
 			}
-			System.err.println("[Error] Can't find " + APPElement + " on screen.");
+			System.err.print("[Error] Can't find " + APPElement + " on screen.");
 		} else {
 			for (Object element : elements) {
 				if (element.equals("On")) {
-					System.err.println("[Error] Can't turn on WiFi.");
+					System.err.print("[Error] Can't turn on WiFi.");
 				} else if (element.equals("Off")) {
-					System.err.println("[Error] Can't turn off WiFi.");
+					System.err.print("[Error] Can't turn off WiFi.");
 				} else if (element.equals("HideKeyboard")) {
-					System.err.println("[Error] Can't hide keyboard.");
+					System.err.print("[Error] Can't hide keyboard.");
 				} else if (element.equals("Sleep")) {
-					System.err.println("[Error] Fail to sleep.");
+					System.err.print("[Error] Fail to sleep.");
 				} else if (element.equals("ScreenShot")) {
-					System.err.println("[Error] Fail to ScreenShot.");
+					System.err.print("[Error] Fail to ScreenShot.");
 				} else if (element.equals("Portrait")) {
-					System.err.println("[Error] Can't rotate to portrait.");
+					System.err.print("[Error] Can't rotate to portrait.");
 				} else if (element.equals("Landscape")) {
-					System.err.println("[Error] Can't rotate to landscape.");
+					System.err.print("[Error] Can't rotate to landscape.");
 				} else if (element.equals("EndAppiumSession")) {
-					System.err.println("[Error] Can't end session.");
+					System.err.print("[Error] Can't end session.");
 				} else if (element.equals("QuitAPP")) {
-					System.err.println("[Error] Can't close APP.");
+					System.err.print("[Error] Can't close APP.");
 				} else if (element.equals("ResetAPP")) {
-					System.err.println("[Error] Can't reset APP.");
+					System.err.print("[Error] Can't reset APP.");
 				} else if (element.equals("CeateAppiumSession")) {
-					System.err.println("[Error] Can't create new session.");
+					System.err.print("[Error] Can't create new session.");
 				} else if (element.equals("LaunchAPP")) {
 					System.err.print("[Error] Can't launch APP.");
 				} else if (element.equals("BACK") || element.equals("Home") || element.equals("Power")
 						|| element.equals("Recent")) {
-					System.err.println("[Error] Can't execute " + element + " button.");
+					System.err.print("[Error] Can't execute " + element + " button.");
 				} else if (element.equals("Customized")) {
-					System.err.println("[Error] Can't execute Customized_Method.");
+					System.err.print("[Error] Can't execute Customized_Method.");
 				} else {
-					System.err.println("[Error] Can't find " + element + " on screen.");
+					System.err.print("[Error] Can't find " + element + " on screen.");
 				}
 			}
 		}
-
+		System.err.println(" " + reportDate);
 		// System.err.println("[Error] APP quit unexpectedly.");
 		String FilePath = MakeErrorFolder();// 建立各案例資料夾存放log資訊及Screenshot資訊
 		ErrorScreenShot(FilePath);// Screenshot Error畫面
