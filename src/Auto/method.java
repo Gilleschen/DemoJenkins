@@ -1,15 +1,11 @@
 package Auto;
 
 import static java.time.Duration.ofSeconds;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -17,10 +13,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -32,9 +26,7 @@ import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import com.google.common.base.Stopwatch;
-import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
@@ -67,14 +59,15 @@ public class method {
 	static Boolean VerifiedResult;// Verified判斷結果；ture為正確；false為錯誤
 	static int CurrentCaseStep;
 	static long totaltime;// 統計所有案例測試時間
+	static int CurrentCase;
 
 	public ArrayList<ArrayList> method() throws NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, InstantiationException, IOException {
 		Object obj = new method();
 		Class c = obj.getClass();
 		String methodName = null;
-		InitialLaunchAPP();// 啟動Appium Session
-		for (int CurrentCase = 0; CurrentCase < TestCase.StepList.size(); CurrentCase++) {
+		CeateAppiumSession();// 啟動Appium Session
+		for (CurrentCase = 0; CurrentCase < TestCase.StepList.size(); CurrentCase++) {
 			Stopwatch timer = Stopwatch.createStarted();// 開始計時
 			System.out.println("[info] CaseName:|" + TestCase.CaseList.get(CurrentCase).toString() + "|");
 			ResultList = new ArrayList();
@@ -83,7 +76,7 @@ public class method {
 			for (int CurrentCaseStep = 0; CurrentCaseStep < TestCase.StepList.get(CurrentCase)
 					.size(); CurrentCaseStep++) {
 				if (!CommandError) {
-					System.out.print("[Result]" + TestCase.CaseList.get(CurrentCase).toString() + ":ERROR!");
+					System.out.print("[Result] " + TestCase.CaseList.get(CurrentCase).toString() + ":ERROR!");
 					break;// 若目前測試案例出現CommandError=false，則跳出目前案例並執行下一個案例
 				}
 				switch (TestCase.StepList.get(CurrentCase).get(CurrentCaseStep).toString()) {
@@ -307,74 +300,73 @@ public class method {
 			System.out.println("");
 
 		}
-		InitialQuitAPP();// 關閉Appium Session
+		EndAppiumSession();// 關閉Appium Session
 		System.out.println("測試結束!!!" + "(" + totaltime + " s)");
 		return AllResultList;
 	}
 
 	public void ErrorCheck(Object... elements) throws IOException {
-		// 當APP閃退後, driver.getCurrentPackage為null
-		if (driver.getCurrentPackage() != null) {
-			if (elements.length > 1) {
-				// APP畫面上找不到指定元件
-				String APPElement = "";
-				int i = 0;
-				for (Object element : elements) {
-					APPElement = APPElement + element;
-					if (i != (elements.length - 1)) {// 判斷是否處理到最後一個element
-						APPElement = APPElement + " or ";// 組成" A元件 or B元件 or
-															// C元件"字串
-					}
-					i++;
+
+		if (elements.length > 1) {
+			// APP畫面上找不到指定元件
+			String APPElement = "";
+			int i = 0;
+			for (Object element : elements) {
+				APPElement = APPElement + element;
+				if (i != (elements.length - 1)) {// 判斷是否處理到最後一個element
+					APPElement = APPElement + " or ";// 組成" A元件 or B元件 or
+														// C元件"字串
 				}
-				System.err.println("[Error] Can't find " + APPElement + " on screen.");
-			} else {
-				for (Object element : elements) {
-					if (element.equals("On")) {
-						System.err.println("[Error] Can't turn on WiFi.");
-					} else if (element.equals("Off")) {
-						System.err.println("[Error] Can't turn off WiFi.");
-					} else if (element.equals("HideKeyboard")) {
-						System.err.println("[Error] Can't hide keyboard.");
-					} else if (element.equals("Sleep")) {
-						System.err.println("[Error] Fail to sleep.");
-					} else if (element.equals("ScreenShot")) {
-						System.err.println("[Error] Fail to ScreenShot.");
-					} else if (element.equals("Portrait")) {
-						System.err.println("[Error] Can't rotate to portrait.");
-					} else if (element.equals("Landscape")) {
-						System.err.println("[Error] Can't rotate to landscape.");
-					} else if (element.equals("InitialQuitAPP")) {
-						System.err.println("[Error] Can't end session.");
-					} else if (element.equals("QuitAPP")) {
-						System.err.println("[Error] Can't close APP.");
-					} else if (element.equals("ResetAPP")) {
-						System.err.println("[Error] Can't reset APP.");
-					} else if (element.equals("InitialLaunchAPP")) {
-						System.err.println("[Error] Can't create new session.");
-					} else if (element.equals("LaunchAPP")) {
-						System.err.print("[Error] Can't launch APP.");
-					} else if (element.equals("BACK") || element.equals("Home") || element.equals("Power")
-							|| element.equals("Recent")) {
-						System.err.println("[Error] Can't execute " + element + " button.");
-					} else if (element.equals("Customized")) {
-						System.err.println("[Error] Can't execute Customized_Method.");
-					} else {
-						System.err.println("[Error] Can't find " + element + " on screen.");
-					}
+				i++;
+			}
+			System.err.println("[Error] Can't find " + APPElement + " on screen.");
+		} else {
+			for (Object element : elements) {
+				if (element.equals("On")) {
+					System.err.println("[Error] Can't turn on WiFi.");
+				} else if (element.equals("Off")) {
+					System.err.println("[Error] Can't turn off WiFi.");
+				} else if (element.equals("HideKeyboard")) {
+					System.err.println("[Error] Can't hide keyboard.");
+				} else if (element.equals("Sleep")) {
+					System.err.println("[Error] Fail to sleep.");
+				} else if (element.equals("ScreenShot")) {
+					System.err.println("[Error] Fail to ScreenShot.");
+				} else if (element.equals("Portrait")) {
+					System.err.println("[Error] Can't rotate to portrait.");
+				} else if (element.equals("Landscape")) {
+					System.err.println("[Error] Can't rotate to landscape.");
+				} else if (element.equals("EndAppiumSession")) {
+					System.err.println("[Error] Can't end session.");
+				} else if (element.equals("QuitAPP")) {
+					System.err.println("[Error] Can't close APP.");
+				} else if (element.equals("ResetAPP")) {
+					System.err.println("[Error] Can't reset APP.");
+				} else if (element.equals("CeateAppiumSession")) {
+					System.err.println("[Error] Can't create new session.");
+				} else if (element.equals("LaunchAPP")) {
+					System.err.print("[Error] Can't launch APP.");
+				} else if (element.equals("BACK") || element.equals("Home") || element.equals("Power")
+						|| element.equals("Recent")) {
+					System.err.println("[Error] Can't execute " + element + " button.");
+				} else if (element.equals("Customized")) {
+					System.err.println("[Error] Can't execute Customized_Method.");
+				} else {
+					System.err.println("[Error] Can't find " + element + " on screen.");
 				}
 			}
-		} else {
-			// APP Crash 閃退
-			System.err.println("[Error] APP quit unexpectedly.");
-			logcat();// 收集閃退logcat
 		}
+
+		// System.err.println("[Error] APP quit unexpectedly.");
+		String FilePath = MakeErrorFolder();// 建立各案例資料夾存放log資訊及Screenshot資訊
+		ErrorScreenShot(FilePath);// Screenshot Error畫面
+		logcat(FilePath);// 收集閃退logcat
 		CommandError = false;// 設定CommandError=false
 		ResultList.add("error");
 		AllResultList.add(ResultList);
 	}
 
-	public void logcat() throws IOException {
+	public void logcat(String FilePath) throws IOException {
 		// 收集閃退log
 		// System.out.println("[info] Saving device log...");
 		DateFormat df = new SimpleDateFormat("yyyy_MM_dd_HH-mm-ss");
@@ -383,8 +375,8 @@ public class method {
 
 		List<LogEntry> logEntries = driver.manage().logs().get("logcat").filter(Level.ALL);
 		try {
-			FileWriter fw = new FileWriter("C:\\TUTK_QA_TestTool\\TestReport\\"
-					+ TestCase.CaseList.get(CurrentCaseNumber).toString() + "_" + reportDate + "_log" + ".txt");
+			FileWriter fw = new FileWriter(FilePath + TestCase.CaseList.get(CurrentCaseNumber).toString() + "_"
+					+ reportDate + "_log" + ".txt");
 			for (int i = 0; i < logEntries.size(); i++) {
 				fw.write(logEntries.get(i).toString() + "\n");
 			}
@@ -394,11 +386,33 @@ public class method {
 		} catch (Exception e) {
 			System.err.println("[Error] Fail to save device log.");
 		}
+	}
 
+	public void ErrorScreenShot(String FilePath) {
+		try {
+			System.out.println("[info] Taking a screenshot of error.");
+			DateFormat df = new SimpleDateFormat("yyyy_MM_dd_HH-mm-ss");
+			Date today = Calendar.getInstance().getTime();
+			String reportDate = df.format(today);
+			File screenShotFile = (File) driver.getScreenshotAs(OutputType.FILE);
+			FileUtils.copyFile(screenShotFile,
+					new File(FilePath + TestCase.CaseList.get(CurrentCaseNumber) + "_" + reportDate + ".jpg"));
+		} catch (IOException e) {
+			System.err.println("[Error] Fail to ErrorScreenShot.");
+		}
+	}
+
+	public String MakeErrorFolder() {
+		String filePath = "C:\\TUTK_QA_TestTool\\TestReport\\" + TestCase.DeviceInformation.appPackage.toString() + "\\"
+				+ TestCase.CaseList.get(CurrentCase).toString() + "\\";
+		File file = new File(filePath);
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+		return filePath;
 	}
 
 	public void Customized() throws IOException {
-
 		Customized custom = new Customized(driver);
 		if (!custom.Customized_Method()) {
 			ErrorCheck("Customized");
@@ -406,7 +420,6 @@ public class method {
 	}
 
 	public void Byid_VerifyText() throws IOException {
-
 		try {
 			System.out.println("[info] Executing:|Byid_VerifyText|" + appElemnt + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
@@ -643,15 +656,12 @@ public class method {
 
 		try {
 			System.out.println("[info] Executing:|ScreenShot|");
-			Calendar date = Calendar.getInstance();
-			String month = Integer.toString(date.get(Calendar.MONTH) + 1);
-			String day = Integer.toString(date.get(Calendar.DAY_OF_MONTH));
-			String hour = Integer.toString(date.get(Calendar.HOUR_OF_DAY));
-			String min = Integer.toString(date.get(Calendar.MINUTE));
-			String sec = Integer.toString(date.get(Calendar.SECOND));
+			DateFormat df = new SimpleDateFormat("yyyy_MM_dd_HH-mm-ss");
+			Date today = Calendar.getInstance().getTime();
+			String reportDate = df.format(today);
 			File screenShotFile = (File) driver.getScreenshotAs(OutputType.FILE);
 			FileUtils.copyFile(screenShotFile, new File("C:\\TUTK_QA_TestTool\\TestReport\\"
-					+ TestCase.CaseList.get(CurrentCaseNumber) + "_" + month + day + hour + min + sec + ".jpg"));
+					+ TestCase.CaseList.get(CurrentCaseNumber) + "_" + reportDate + ".jpg"));
 		} catch (IOException e) {
 			ErrorCheck("ScreenShot");
 		}
@@ -675,13 +685,12 @@ public class method {
 		}
 	}
 
-	public void InitialQuitAPP() throws IOException {
-		boolean state = false;
+	public void EndAppiumSession() throws IOException {
 		try {
 			System.out.println("[info] Executing:|End Session|");
 			driver.quit();
 		} catch (Exception e) {
-			ErrorCheck("InitialQuitAPP");
+			ErrorCheck("EndAppiumSession");
 		}
 	}
 
@@ -729,7 +738,7 @@ public class method {
 		}
 	}
 
-	public void InitialLaunchAPP() throws IOException {
+	public void CeateAppiumSession() throws IOException {
 		DesiredCapabilities cap = new DesiredCapabilities();
 		cap.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, device_timeout);
 		cap.setCapability(MobileCapabilityType.DEVICE_NAME, TestCase.DeviceInformation.deviceName.get(0));// 固定index
@@ -746,7 +755,7 @@ public class method {
 			System.out.println("");
 			driver = new AndroidDriver<>(new URL("http://127.0.0.1:" + port + "/wd/hub"), cap);
 		} catch (Exception e) {
-			ErrorCheck("InitialLaunchAPP");
+			ErrorCheck("CeateAppiumSession");
 		}
 	}
 
