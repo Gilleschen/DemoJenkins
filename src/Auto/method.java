@@ -322,7 +322,7 @@ public class method {
 				}
 				i++;
 			}
-			System.err.print("[Error] Can't find " + APPElement + " on screen.");
+			System.err.print("[Error] Can not found " + APPElement + " on screen.");
 		} else {
 			for (Object element : elements) {
 				if (element.equals("On")) {
@@ -355,7 +355,7 @@ public class method {
 				} else if (element.equals("Customized")) {
 					System.err.print("[Error] Can't execute Customized_Method.");
 				} else {
-					System.err.print("[Error] Can't find " + element + " on screen.");
+					System.err.print("[Error] Can not found " + element + " on screen.");
 				}
 			}
 		}
@@ -406,8 +406,10 @@ public class method {
 	}
 
 	public String MakeErrorFolder() {
+		// 資料夾結構 C:\TUTK_QA_TestTool\TestReport\appPackage\CaseName\DeviceUdid
 		String filePath = "C:\\TUTK_QA_TestTool\\TestReport\\" + TestCase.DeviceInformation.appPackage.toString() + "\\"
-				+ TestCase.CaseList.get(CurrentCase).toString() + "\\";
+				+ TestCase.CaseList.get(CurrentCase).toString() + "\\" + TestCase.DeviceInformation.deviceName.get(0)
+				+ "\\";
 		File file = new File(filePath);
 		if (!file.exists()) {
 			file.mkdirs();
@@ -746,6 +748,7 @@ public class method {
 		cap.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, device_timeout);
 		cap.setCapability(MobileCapabilityType.DEVICE_NAME, TestCase.DeviceInformation.deviceName.get(0));// 固定index
 																											// 0
+		cap.setCapability(MobileCapabilityType.UDID, TestCase.DeviceInformation.deviceName.get(0));
 		cap.setCapability(MobileCapabilityType.PLATFORM_VERSION, TestCase.DeviceInformation.platformVersion.get(0));// 固定index
 																													// 0
 		cap.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, TestCase.DeviceInformation.appPackage);

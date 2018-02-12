@@ -41,7 +41,7 @@ public class LoadExpectResult {
 
 			workbook.close();
 		} catch (IOException e) {
-			System.out.println("Can't find C:\\TUTK_QA_TestTool\\TestTool\\TestScript.xlsm");
+			System.out.println("Can not found C:\\TUTK_QA_TestTool\\TestTool\\TestScript.xlsm");
 		}
 	}
 

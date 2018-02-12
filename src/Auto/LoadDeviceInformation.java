@@ -68,7 +68,7 @@ public class LoadDeviceInformation {
 			workBook.close();
 
 		} catch (Exception e) {
-			System.out.println("Can't find C:\\TUTK_QA_TestTool\\TestTool\\TestScript.xlsm");
+			System.out.println("Can not found C:\\TUTK_QA_TestTool\\TestTool\\TestScript.xlsm");
 		}
 	}
 
