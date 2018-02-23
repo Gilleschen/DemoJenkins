@@ -406,10 +406,11 @@ public class method {
 	}
 
 	public String MakeErrorFolder() {
-		// 資料夾結構 C:\TUTK_QA_TestTool\TestReport\appPackage\CaseName\DeviceUdid
+		// 資料夾結構
+		// C:\TUTK_QA_TestTool\TestReport\appPackage\CaseName\DeviceUdid\log\
 		String filePath = "C:\\TUTK_QA_TestTool\\TestReport\\" + TestCase.DeviceInformation.appPackage.toString() + "\\"
 				+ TestCase.CaseList.get(CurrentCase).toString() + "\\" + TestCase.DeviceInformation.deviceName.get(0)
-				+ "\\";
+				+ "\\log\\";
 		File file = new File(filePath);
 		if (!file.exists()) {
 			file.mkdirs();
@@ -660,13 +661,24 @@ public class method {
 	public void ScreenShot() throws IOException {
 
 		try {
+
+			// 資料夾結構
+			// C:\TUTK_QA_TestTool\TestReport\appPackage\CaseName\DeviceUdid\ScreenShot\
+			String filePath = "C:\\TUTK_QA_TestTool\\TestReport\\" + TestCase.DeviceInformation.appPackage.toString()
+					+ "\\" + TestCase.CaseList.get(CurrentCase).toString() + "\\"
+					+ TestCase.DeviceInformation.deviceName.get(0) + "\\ScreenShot\\";
+			File file = new File(filePath);
+			if (!file.exists()) {
+				file.mkdirs();
+			}
+
 			System.out.println("[info] Executing:|ScreenShot|");
 			DateFormat df = new SimpleDateFormat("yyyy_MM_dd_HH-mm-ss");
 			Date today = Calendar.getInstance().getTime();
 			String reportDate = df.format(today);
 			File screenShotFile = (File) driver.getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(screenShotFile, new File("C:\\TUTK_QA_TestTool\\TestReport\\"
-					+ TestCase.CaseList.get(CurrentCaseNumber) + "_" + reportDate + ".jpg"));
+			FileUtils.copyFile(screenShotFile,
+					new File(filePath + TestCase.CaseList.get(CurrentCaseNumber) + "_" + reportDate + ".jpg"));
 		} catch (IOException e) {
 			ErrorCheck("ScreenShot");
 		}
