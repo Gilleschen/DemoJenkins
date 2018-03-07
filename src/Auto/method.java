@@ -614,6 +614,7 @@ public class method {
 			wait.until(ExpectedConditions
 					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)))
 					.clear();
+			HideKeyboard();
 		} catch (Exception e) {
 			ErrorCheck(appElemnt);
 		}
@@ -625,6 +626,7 @@ public class method {
 			System.out.println("[info] Executing:|ByXpath_Clear|" + appElemnt + "|Clear|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt))).clear();
+			HideKeyboard();
 		} catch (Exception e) {
 			ErrorCheck(appElemnt);
 		}
