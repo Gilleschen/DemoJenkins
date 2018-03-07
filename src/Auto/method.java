@@ -767,6 +767,7 @@ public class method {
 		cap.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, TestCase.DeviceInformation.appActivity);
 		cap.setCapability(MobileCapabilityType.NO_RESET, TestCase.DeviceInformation.ResetAPP);
 		cap.setCapability("autoLaunch", false); // 不啟動APP
+		
 
 		try {
 			System.out.println("[info] Executing:|Create New Session|");
@@ -913,7 +914,7 @@ public class method {
 			TouchAction t = new TouchAction(driver);
 			WebElement ele2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(toElemnt)));
 			WebElement ele1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt)));
-			t.press(ele1).waitAction(WaitOptions.waitOptions(ofSeconds(1))).moveTo(ele2).release().perform();
+			t.press(ele1).waitAction(WaitOptions.waitOptions(ofSeconds(2))).moveTo(ele2).release().perform();
 
 		} catch (Exception e) {
 			ErrorCheck(appElemnt, toElemnt);
@@ -931,7 +932,7 @@ public class method {
 					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + toElemnt)));
 			WebElement ele1 = wait.until(ExpectedConditions
 					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)));
-			t.press(ele1).waitAction(WaitOptions.waitOptions(ofSeconds(1))).moveTo(ele2).release().perform();
+			t.press(ele1).waitAction(WaitOptions.waitOptions(ofSeconds(2))).moveTo(ele2).release().perform();
 		} catch (Exception e) {
 			ErrorCheck(appElemnt, toElemnt);
 		}
@@ -974,11 +975,11 @@ public class method {
 			for (int j = 0; j < iterative; j++) {
 
 				if (scroll.equals("DOWN")) {// 畫面向下捲動
-					t.press(p.x + errorX, p.y + s.height - errorY).waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+					t.press(p.x + errorX, p.y + s.height - errorY).waitAction(WaitOptions.waitOptions(ofSeconds(2)))
 							.moveTo(p.x + errorX, p.y + errorY).release().perform();
 
 				} else if (scroll.equals("UP")) {// 畫面向上捲動
-					t.press(p.x + errorX, p.y + errorY).waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+					t.press(p.x + errorX, p.y + errorY).waitAction(WaitOptions.waitOptions(ofSeconds(2)))
 							.moveTo(p.x + errorX, p.y + s.height - errorY).release().perform();
 				}
 			}
@@ -1006,10 +1007,10 @@ public class method {
 			for (int j = 0; j < iterative; j++) {
 
 				if (scroll.equals("RIGHT")) {// 畫面向右捲動 (觀看畫面左方內容)
-					t.press(p.x + errorX, p.y + errorY).waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+					t.press(p.x + errorX, p.y + errorY).waitAction(WaitOptions.waitOptions(ofSeconds(2)))
 							.moveTo(p.x + s.width - errorX, p.y + errorY).release().perform();
 				} else if (scroll.equals("LEFT")) {// 畫面向左捲動 (觀看畫面右方內容)
-					t.press(p.x + s.width - errorX, p.y + errorY).waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+					t.press(p.x + s.width - errorX, p.y + errorY).waitAction(WaitOptions.waitOptions(ofSeconds(2)))
 							.moveTo(p.x + errorX, p.y + errorY).release().perform();
 				}
 			}
@@ -1034,8 +1035,8 @@ public class method {
 			ScrollBar = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt)));// 卷軸元件
 			ScrollBarS = ScrollBar.getSize();// 卷軸元件的長及寬
 			ScrollBarP = ScrollBar.getLocation();// 卷軸的座標
-			int errorX = (int) Math.round(ScrollBarS.width * 0.1);
-			int errorY = (int) Math.round(ScrollBarS.height * 0.1);
+			int errorX = (int) Math.round(ScrollBarS.width * 0.15);
+			int errorY = (int) Math.round(ScrollBarS.height * 0.15);
 			List<WebElement> targetlist = wait
 					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(appElemntarray)));// 要搜尋的多筆類似元件清單
 
@@ -1054,13 +1055,13 @@ public class method {
 					case "DOWN":
 						if (targetElementP.y > ScrollBarP.y + ScrollBarS.height) {// 若搜尋元件的y座標大於卷軸範圍，表示搜尋元件全部UI被卷軸遮住
 							t.press(targetElementP.x, ScrollBarS.height + ScrollBarP.y - errorY)
-									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
 									.moveTo(targetElementP.x, ScrollBarP.y + errorY).release().perform();
 
 						} else if (targetElementP.y + targetElementS.height == ScrollBarP.y + ScrollBarS.height) {// 若搜尋元件的y座標與寬度總和等於卷軸長度，表示搜尋元件的部分UI被卷軸遮住
 
 							t.press(targetElementP.x - errorY, targetElementP.y)
-									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
 									.moveTo(targetElementP.x, ScrollBarP.y + errorY).release().perform();
 
 						}
@@ -1069,13 +1070,13 @@ public class method {
 					case "UP":
 						if (targetElementP.y + targetElementS.height < ScrollBarP.y) {// 若搜尋元件的最大y座標小於卷軸y座標，表示搜尋元件全部UI被卷軸遮住
 							t.press(targetElementP.x, ScrollBarP.y + errorY)
-									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
 									.moveTo(targetElementP.x, ScrollBarS.height + ScrollBarP.y - errorY).release()
 									.perform();
 
 						} else {// 反之，若搜尋元件的最大y座標大於卷軸y座標，表示搜尋元件全部UI被卷軸遮住
 							t.press(targetElementP.x, ScrollBarP.y + errorY)
-									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
 									.moveTo(targetElementP.x, ScrollBarP.y + ScrollBarS.height - errorY).release()
 									.perform();
 
@@ -1085,12 +1086,12 @@ public class method {
 					case "LEFT":// 畫面向左捲動(觀看畫面右方內容)
 						if (targetElementP.x > ScrollBarP.x + ScrollBarS.width) {// 若搜尋元件的x座標大於卷軸範圍，表示搜尋元件全部UI被卷軸遮住
 							t.press(ScrollBarP.x + ScrollBarS.width - errorX, targetElementP.y)
-									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
 									.moveTo(ScrollBarP.x + errorX, targetElementP.y).release().perform();
 
 						} else if (targetElementP.x + targetElementS.width == ScrollBarP.x + ScrollBarS.width) {// 若搜尋元件的x座標與寬度總和等於卷軸寬度，表示搜尋元件的部分UI被卷軸遮住
 							t.press(targetElementP.x - errorX, targetElementP.y)
-									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
 									.moveTo(ScrollBarP.x + errorX, targetElementP.y).release().perform();
 
 						}
@@ -1099,12 +1100,12 @@ public class method {
 					case "RIGHT":// 畫面向右捲動(觀看畫面左方內容)
 						if (targetElementP.x + targetElementS.width < ScrollBarP.x) {// 若搜尋元件的最大x座標小於卷軸x座標，表示搜尋元件全部UI被卷軸遮住
 							t.press(ScrollBarP.x + errorX, targetElementP.y)
-									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
 									.moveTo(ScrollBarP.x + ScrollBarS.width - errorX, targetElementP.y).release()
 									.perform();
 						} else if (targetElementP.x == ScrollBarP.x) {// 若搜尋元件的x座標等於卷軸x座標，可能表示搜尋元件的部分UI被卷軸遮住
 							t.press(targetElementP.x + targetElementS.width + errorX, targetElementP.y)
-									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
 									.moveTo(ScrollBarP.x + ScrollBarS.width - errorX, targetElementP.y).release()
 									.perform();
 						}
@@ -1121,26 +1122,26 @@ public class method {
 
 					case "DOWN":
 						t.press(ScrollBarP.x + errorX, ScrollBarP.y + ScrollBarS.height - errorY)
-								.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+								.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
 								.moveTo(ScrollBarP.x + errorX, ScrollBarP.y + errorY).release().perform();// 向下捲動
 						break;
 
 					case "UP":
 						t.press(ScrollBarP.x + errorX, ScrollBarP.y + errorY)
-								.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+								.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
 								.moveTo(ScrollBarP.x + errorX, ScrollBarP.y + ScrollBarS.height - errorY).release()
 								.perform();// 向上捲動
 						break;
 
 					case "LEFT":
 						t.press(ScrollBarP.x + ScrollBarS.width - errorX, ScrollBarP.y + errorY)
-								.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+								.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
 								.moveTo(ScrollBarP.x + errorX, ScrollBarP.y + errorY).release().perform();// 畫面向左捲動(觀看畫面右方內容)
 						break;
 
 					case "RIGHT":
 						t.press(ScrollBarP.x + errorX, ScrollBarP.y + errorY)
-								.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+								.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
 								.moveTo(ScrollBarP.x + ScrollBarS.width - errorX, ScrollBarP.y + errorY).release()
 								.perform();// 畫面向右捲動(觀看畫面左方內容)
 						break;
