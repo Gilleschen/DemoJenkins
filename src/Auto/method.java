@@ -228,6 +228,7 @@ public class method {
 					appElemntarray = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 3);
 					appInput = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 4);
 					appInputXpath = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 5);
+					// appInputXpath = "//*[@text='" + appInput + "']";
 					CurrentCaseStep = CurrentCaseStep + 5;
 					break;
 
@@ -564,6 +565,7 @@ public class method {
 			wait.until(ExpectedConditions
 					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)))
 					.sendKeys(appInput);
+			HideKeyboard();
 		} catch (Exception e) {
 			ErrorCheck(appElemnt);
 		}
@@ -574,6 +576,7 @@ public class method {
 			System.out.println("[info] Executing:|ByXpath_SendKey|" + appElemnt + "|" + appInput + "|");
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt))).sendKeys(appInput);
+			HideKeyboard();
 		} catch (Exception e) {
 			ErrorCheck(appElemnt);
 		}
@@ -587,6 +590,7 @@ public class method {
 					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)))
 					.click();
 			// wait.until(ExpectedConditions.presenceOfElementLocated(By.id("com.tutk.kalayapp:id/preview"))).click();
+
 		} catch (Exception e) {
 			ErrorCheck(appElemnt);
 		}
@@ -767,7 +771,6 @@ public class method {
 		cap.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, TestCase.DeviceInformation.appActivity);
 		cap.setCapability(MobileCapabilityType.NO_RESET, TestCase.DeviceInformation.ResetAPP);
 		cap.setCapability("autoLaunch", false); // ¤£±Ò°ÊAPP
-		
 
 		try {
 			System.out.println("[info] Executing:|Create New Session|");
