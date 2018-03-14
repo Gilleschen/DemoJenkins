@@ -3,7 +3,7 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="Zephyr_Excel_Junit_Ver3">
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="Zephyr_Excel_Junit_Ver4">
     <property environment="env"/>
     <property name="ECLIPSE_HOME" value="D:/eclipse/"/>
     <property name="junit.output.dir" value="junit"/>
@@ -14,10 +14,12 @@
         <pathelement location="${ECLIPSE_HOME}plugins/org.junit_4.12.0.v201504281640/junit.jar"/>
         <pathelement location="${ECLIPSE_HOME}plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
     </path>
-    <path id="Zephyr_Excel_Junit_Ver3.classpath">
+    <path id="Zephyr_Excel_Junit_Ver4.classpath">
         <pathelement location="bin"/>
-        <path refid="JUnit 4.libraryclasspath"/>
+        <pathelement location="client-combined-3.8.1.jar"/>
+        <pathelement location="client-combined-3.8.1-sources.jar"/>
         <pathelement location="commons-collections4-4.1.jar"/>
+        <pathelement location="java-client-6.0.0-BETA2.jar"/>
         <pathelement location="poi-3.16.jar"/>
         <pathelement location="poi-examples-3.16.jar"/>
         <pathelement location="poi-excelant-3.16.jar"/>
@@ -57,9 +59,7 @@
         <pathelement location="lib/xalan-2.7.2.jar"/>
         <pathelement location="lib/xercesImpl-2.11.0.jar"/>
         <pathelement location="lib/xml-apis-1.4.01.jar"/>
-        <pathelement location="java-client-6.0.0-BETA2.jar"/>
-        <pathelement location="client-combined-3.8.1.jar"/>
-        <pathelement location="client-combined-3.8.1-sources.jar"/>
+        <path refid="JUnit 4.libraryclasspath"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
@@ -79,7 +79,7 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
-            <classpath refid="Zephyr_Excel_Junit_Ver3.classpath"/>
+            <classpath refid="Zephyr_Excel_Junit_Ver4.classpath"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
@@ -101,7 +101,15 @@
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
             <test name="Auto.Junit" todir="${junit.output.dir}"/>
-            <classpath refid="Zephyr_Excel_Junit_Ver3.classpath"/>
+            <classpath refid="Zephyr_Excel_Junit_Ver4.classpath"/>
+        </junit>
+    </target>
+    <target name="Junit.primeNumbers">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="Auto.Junit" todir="${junit.output.dir}"/>
+            <classpath refid="Zephyr_Excel_Junit_Ver4.classpath"/>
         </junit>
     </target>
     <target name="junitreport">
