@@ -30,11 +30,13 @@ import com.google.common.base.Stopwatch;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
-import io.appium.java_client.android.Connection;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.MobileCapabilityType;
+import io.appium.java_client.touch.LongPressOptions;
 import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.ElementOption;
+import io.appium.java_client.touch.offset.PointOption;
 
 public class method {
 	int port = 4723;// Appium port
@@ -411,8 +413,8 @@ public class method {
 		// 資料夾結構
 		// C:\TUTK_QA_TestTool\TestReport\appPackage\CaseName\DeviceUdid\log\
 		String filePath = "C:\\TUTK_QA_TestTool\\TestReport\\" + TestCase.DeviceInformation.appPackage.toString() + "\\"
-				+ TestCase.CaseList.get(CurrentCase).toString() + "\\" + TestCase.DeviceInformation.deviceName.get(0)
-				+ "\\log\\";
+				+ TestCase.CaseList.get(CurrentCase).toString() + "\\"
+				+ TestCase.DeviceInformation.deviceName.toString() + "\\log\\";
 		File file = new File(filePath);
 		if (!file.exists()) {
 			file.mkdirs();
@@ -673,7 +675,7 @@ public class method {
 			// C:\TUTK_QA_TestTool\TestReport\appPackage\CaseName\DeviceUdid\ScreenShot\
 			String filePath = "C:\\TUTK_QA_TestTool\\TestReport\\" + TestCase.DeviceInformation.appPackage.toString()
 					+ "\\" + TestCase.CaseList.get(CurrentCase).toString() + "\\"
-					+ TestCase.DeviceInformation.deviceName.get(0) + "\\ScreenShot\\";
+					+ TestCase.DeviceInformation.deviceName.toString() + "\\ScreenShot\\";
 			File file = new File(filePath);
 			if (!file.exists()) {
 				file.mkdirs();
@@ -711,7 +713,8 @@ public class method {
 
 	public void EndAppiumSession() throws IOException {
 		try {
-			System.out.println("[info] Executing:|End Session|");
+			System.out.println("[info] Executing:|End Session with " + TestCase.DeviceInformation.deviceName.toString()
+					+ "|Server Port:" + port + "|");
 			driver.quit();
 		} catch (Exception e) {
 			ErrorCheck("EndAppiumSession");
@@ -765,19 +768,24 @@ public class method {
 	public void CeateAppiumSession() throws IOException {
 		DesiredCapabilities cap = new DesiredCapabilities();
 		cap.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, device_timeout);
-		cap.setCapability(MobileCapabilityType.DEVICE_NAME, TestCase.DeviceInformation.deviceName.get(0));// 固定index
-																											// 0
-		cap.setCapability(MobileCapabilityType.UDID, TestCase.DeviceInformation.deviceName.get(0));
-		cap.setCapability(MobileCapabilityType.PLATFORM_VERSION, TestCase.DeviceInformation.platformVersion.get(0));// 固定index
-																													// 0
+		cap.setCapability(MobileCapabilityType.DEVICE_NAME, TestCase.DeviceInformation.deviceName);// 固定index
+																									// 0
+		cap.setCapability(MobileCapabilityType.UDID, TestCase.DeviceInformation.deviceName);
+		cap.setCapability(MobileCapabilityType.PLATFORM_VERSION, TestCase.DeviceInformation.platformVersion);// 固定index
+																												// 0
 		cap.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, TestCase.DeviceInformation.appPackage);
 		cap.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, TestCase.DeviceInformation.appActivity);
 		cap.setCapability(MobileCapabilityType.NO_RESET, TestCase.DeviceInformation.ResetAPP);
 		cap.setCapability("autoLaunch", false); // 不啟動APP
-		cap.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.ANDROID_UIAUTOMATOR2);
+
+		if (TestCase.DeviceInformation.UIAutomator2) {
+			cap.setCapability(MobileCapabilityType.AUTOMATION_NAME, "uiautomator2");// 因Android
+																					// 7.0設備以上需使用UIAutomator2，才可操作UI元件
+		}
 
 		try {
-			System.out.println("[info] Executing:|Create New Session|");
+			System.out.println("[info] Executing:|Create New Session with "
+					+ TestCase.DeviceInformation.deviceName.toString() + "|Server Port:" + port + "|");
 			System.out.println("");
 			driver = new AndroidDriver<>(new URL("http://127.0.0.1:" + port + "/wd/hub"), cap);
 		} catch (Exception e) {
@@ -832,40 +840,43 @@ public class method {
 		}
 	}
 
-	public void WiFi() throws IOException {
-
-		try {
-			System.out.println("[info] Executing:|WiFi|" + switchWiFi + "|");
-			// if邏輯說明:(目的避免已開啟wifi或已關閉wif了，又再次執行令啟動wifi或關閉wif(皆去除if判斷僅跑switch流程)，如此可節省測試時間)
-			// [判斷手機連線狀態為WiFi off及data off(皆NONE) &&
-			// Excel指令為On時，才執行switch之Case"On"]
-			// ||[[判斷手機連線狀態為WiFi on || WiFi及Data都啟動(皆ALL)] &&
-			// Excel指令為Off時，才執行switch之Case"Off"]
-
-			if ((driver.getConnection().toString().equals("NONE") && switchWiFi.equals("On"))
-					|| ((driver.getConnection().toString().equals("ALL")
-							|| driver.getConnection().toString().equals("WIFI")) && switchWiFi.equals("Off"))) {
-				switch (switchWiFi) {
-				case "On":
-					driver.setConnection(Connection.WIFI);
-					break;
-				case "Off":
-					driver.setConnection(Connection.NONE);
-					break;
-				}
-			}
-		} catch (Exception e) {
-			switch (switchWiFi) {
-			case "On":
-				ErrorCheck("On");
-				break;
-			case "Off":
-				ErrorCheck("Off");
-				break;
-			}
-		}
-
-	}
+	// public void WiFi() throws IOException {
+	//
+	// try {
+	// System.out.println("[info] Executing:|WiFi|" + switchWiFi + "|");
+	// //
+	// if邏輯說明:(目的避免已開啟wifi或已關閉wif了，又再次執行令啟動wifi或關閉wif(皆去除if判斷僅跑switch流程)，如此可節省測試時間)
+	// // [判斷手機連線狀態為WiFi off及data off(皆NONE) &&
+	// // Excel指令為On時，才執行switch之Case"On"]
+	// // ||[[判斷手機連線狀態為WiFi on || WiFi及Data都啟動(皆ALL)] &&
+	// // Excel指令為Off時，才執行switch之Case"Off"]
+	//
+	// if ((driver.getConnection().toString().equals("NONE") &&
+	// switchWiFi.equals("On"))
+	// || ((driver.getConnection().toString().equals("ALL")
+	// || driver.getConnection().toString().equals("WIFI")) &&
+	// switchWiFi.equals("Off"))) {
+	// switch (switchWiFi) {
+	// case "On":
+	// driver.setConnection(Connection.WIFI);
+	// break;
+	// case "Off":
+	// driver.setConnection(Connection.NONE);
+	// break;
+	// }
+	// }
+	// } catch (Exception e) {
+	// switch (switchWiFi) {
+	// case "On":
+	// ErrorCheck("On");
+	// break;
+	// case "Off":
+	// ErrorCheck("Off");
+	// break;
+	// }
+	// }
+	//
+	// }
 
 	public void Byid_invisibility() throws IOException {
 		try {
@@ -889,13 +900,16 @@ public class method {
 	}
 
 	public void Byid_LongPress() throws IOException {
+
 		try {
 			System.out.println("[info] Executing:|Byid_LongPress|" + appElemnt + "|");
 			TouchAction t = new TouchAction(driver);
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
-			t.longPress(wait.until(ExpectedConditions
-					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt))))
+			t.longPress(LongPressOptions.longPressOptions()
+					.withElement(ElementOption.element(wait.until(ExpectedConditions.visibilityOfElementLocated(
+							By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt))))))
 					.perform();
+
 		} catch (Exception e) {
 			ErrorCheck(appElemnt);
 		}
@@ -906,7 +920,11 @@ public class method {
 			System.out.println("[info] Executing:|ByXpath_LongPress|" + appElemnt + "|");
 			TouchAction t = new TouchAction(driver);
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
-			t.longPress(wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt)))).perform();
+			t.longPress(LongPressOptions.longPressOptions()
+					.withElement(ElementOption
+							.element(wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt))))))
+					.perform();
+
 		} catch (Exception e) {
 			ErrorCheck(appElemnt);
 		}
@@ -917,11 +935,14 @@ public class method {
 
 		try {
 			System.out.println("[info] Executing:|ByXpath_Swipe|" + appElemnt + "|" + toElemnt + "|");
-			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			TouchAction t = new TouchAction(driver);
+			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			WebElement ele2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(toElemnt)));
 			WebElement ele1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt)));
-			t.press(ele1).waitAction(WaitOptions.waitOptions(ofSeconds(2))).moveTo(ele2).release().perform();
+
+			t.press(PointOption.point(ele1.getLocation().x, ele1.getLocation().y))
+					.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+					.moveTo(PointOption.point(ele2.getLocation().x, ele2.getLocation().y)).release().perform();
 
 		} catch (Exception e) {
 			ErrorCheck(appElemnt, toElemnt);
@@ -933,13 +954,17 @@ public class method {
 
 		try {
 			System.out.println("[info] Executing:|Byid_Swipe|" + appElemnt + "|" + toElemnt + "|");
+
 			WebDriverWait wait = new WebDriverWait(driver, command_timeout);
 			TouchAction t = new TouchAction(driver);
 			WebElement ele2 = wait.until(ExpectedConditions
 					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + toElemnt)));
 			WebElement ele1 = wait.until(ExpectedConditions
 					.visibilityOfElementLocated(By.id(TestCase.DeviceInformation.appPackage + ":id/" + appElemnt)));
-			t.press(ele1).waitAction(WaitOptions.waitOptions(ofSeconds(2))).moveTo(ele2).release().perform();
+			t.press(PointOption.point(ele1.getLocation().x, ele1.getLocation().y))
+					.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+					.moveTo(PointOption.point(ele2.getLocation().x, ele2.getLocation().y)).release().perform();
+
 		} catch (Exception e) {
 			ErrorCheck(appElemnt, toElemnt);
 		}
@@ -952,8 +977,8 @@ public class method {
 				System.out.println(
 						"[info] Executing:|Swipe|(" + startx + "," + starty + ")|(" + endx + "," + endy + ")|");
 				TouchAction t = new TouchAction(driver);
-				t.press(startx, starty).waitAction(WaitOptions.waitOptions(ofSeconds(1))).moveTo(endx, endy).release()
-						.perform();
+				t.press(PointOption.point(startx, starty)).waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+						.moveTo(PointOption.point(endx, endy)).release().perform();
 			} catch (Exception e) {
 				ErrorCheck(startx, starty, endx, endy);
 				break;// 出錯後，離開iterative回圈
@@ -982,12 +1007,14 @@ public class method {
 			for (int j = 0; j < iterative; j++) {
 
 				if (scroll.equals("DOWN")) {// 畫面向下捲動
-					t.press(p.x + errorX, p.y + s.height - errorY).waitAction(WaitOptions.waitOptions(ofSeconds(2)))
-							.moveTo(p.x + errorX, p.y + errorY).release().perform();
+					t.press(PointOption.point(p.x + errorX, p.y + s.height - errorY))
+							.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+							.moveTo(PointOption.point(p.x + errorX, p.y + errorY)).release().perform();
 
 				} else if (scroll.equals("UP")) {// 畫面向上捲動
-					t.press(p.x + errorX, p.y + errorY).waitAction(WaitOptions.waitOptions(ofSeconds(2)))
-							.moveTo(p.x + errorX, p.y + s.height - errorY).release().perform();
+					t.press(PointOption.point(p.x + errorX, p.y + errorY))
+							.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+							.moveTo(PointOption.point(p.x + errorX, p.y + s.height - errorY)).release().perform();
 				}
 			}
 
@@ -1014,11 +1041,13 @@ public class method {
 			for (int j = 0; j < iterative; j++) {
 
 				if (scroll.equals("RIGHT")) {// 畫面向右捲動 (觀看畫面左方內容)
-					t.press(p.x + errorX, p.y + errorY).waitAction(WaitOptions.waitOptions(ofSeconds(2)))
-							.moveTo(p.x + s.width - errorX, p.y + errorY).release().perform();
+					t.press(PointOption.point(p.x + errorX, p.y + errorY))
+							.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+							.moveTo(PointOption.point(p.x + s.width - errorX, p.y + errorY)).release().perform();
 				} else if (scroll.equals("LEFT")) {// 畫面向左捲動 (觀看畫面右方內容)
-					t.press(p.x + s.width - errorX, p.y + errorY).waitAction(WaitOptions.waitOptions(ofSeconds(2)))
-							.moveTo(p.x + errorX, p.y + errorY).release().perform();
+					t.press(PointOption.point(p.x + s.width - errorX, p.y + errorY))
+							.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+							.moveTo(PointOption.point(p.x + errorX, p.y + errorY)).release().perform();
 				}
 			}
 		} catch (Exception w) {
@@ -1061,60 +1090,66 @@ public class method {
 
 					case "DOWN":
 						if (targetElementP.y > ScrollBarP.y + ScrollBarS.height) {// 若搜尋元件的y座標大於卷軸範圍，表示搜尋元件全部UI被卷軸遮住
-							t.press(targetElementP.x, ScrollBarS.height + ScrollBarP.y - errorY)
-									.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
-									.moveTo(targetElementP.x, ScrollBarP.y + errorY).release().perform();
+							t.press(PointOption.point(targetElementP.x, ScrollBarS.height + ScrollBarP.y - errorY))
+									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.moveTo(PointOption.point(targetElementP.x, ScrollBarP.y + errorY)).release()
+									.perform();
 
 						} else if (targetElementP.y + targetElementS.height == ScrollBarP.y + ScrollBarS.height) {// 若搜尋元件的y座標與寬度總和等於卷軸長度，表示搜尋元件的部分UI被卷軸遮住
 
-							t.press(targetElementP.x - errorY, targetElementP.y)
-									.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
-									.moveTo(targetElementP.x, ScrollBarP.y + errorY).release().perform();
+							t.press(PointOption.point(targetElementP.x - errorY, targetElementP.y))
+									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.moveTo(PointOption.point(targetElementP.x, ScrollBarP.y + errorY)).release()
+									.perform();
 
 						}
 						break;
 
 					case "UP":
 						if (targetElementP.y + targetElementS.height < ScrollBarP.y) {// 若搜尋元件的最大y座標小於卷軸y座標，表示搜尋元件全部UI被卷軸遮住
-							t.press(targetElementP.x, ScrollBarP.y + errorY)
-									.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
-									.moveTo(targetElementP.x, ScrollBarS.height + ScrollBarP.y - errorY).release()
-									.perform();
+							t.press(PointOption.point(targetElementP.x, ScrollBarP.y + errorY))
+									.waitAction(WaitOptions.waitOptions(ofSeconds(1))).moveTo(PointOption
+											.point(targetElementP.x, ScrollBarS.height + ScrollBarP.y - errorY))
+									.release().perform();
 
 						} else {// 反之，若搜尋元件的最大y座標大於卷軸y座標，表示搜尋元件全部UI被卷軸遮住
-							t.press(targetElementP.x, ScrollBarP.y + errorY)
-									.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
-									.moveTo(targetElementP.x, ScrollBarP.y + ScrollBarS.height - errorY).release()
-									.perform();
+							t.press(PointOption.point(targetElementP.x, ScrollBarP.y + errorY))
+									.waitAction(WaitOptions.waitOptions(ofSeconds(1))).moveTo(PointOption
+											.point(targetElementP.x, ScrollBarP.y + ScrollBarS.height - errorY))
+									.release().perform();
 
 						}
 						break;
 
 					case "LEFT":// 畫面向左捲動(觀看畫面右方內容)
 						if (targetElementP.x > ScrollBarP.x + ScrollBarS.width) {// 若搜尋元件的x座標大於卷軸範圍，表示搜尋元件全部UI被卷軸遮住
-							t.press(ScrollBarP.x + ScrollBarS.width - errorX, targetElementP.y)
-									.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
-									.moveTo(ScrollBarP.x + errorX, targetElementP.y).release().perform();
+							t.press(PointOption.point(ScrollBarP.x + ScrollBarS.width - errorX, targetElementP.y))
+									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.moveTo(PointOption.point(ScrollBarP.x + errorX, targetElementP.y)).release()
+									.perform();
 
 						} else if (targetElementP.x + targetElementS.width == ScrollBarP.x + ScrollBarS.width) {// 若搜尋元件的x座標與寬度總和等於卷軸寬度，表示搜尋元件的部分UI被卷軸遮住
-							t.press(targetElementP.x - errorX, targetElementP.y)
-									.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
-									.moveTo(ScrollBarP.x + errorX, targetElementP.y).release().perform();
+							t.press(PointOption.point(targetElementP.x - errorX, targetElementP.y))
+									.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.moveTo(PointOption.point(ScrollBarP.x + errorX, targetElementP.y)).release()
+									.perform();
 
 						}
 						break;
 
 					case "RIGHT":// 畫面向右捲動(觀看畫面左方內容)
 						if (targetElementP.x + targetElementS.width < ScrollBarP.x) {// 若搜尋元件的最大x座標小於卷軸x座標，表示搜尋元件全部UI被卷軸遮住
-							t.press(ScrollBarP.x + errorX, targetElementP.y)
-									.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
-									.moveTo(ScrollBarP.x + ScrollBarS.width - errorX, targetElementP.y).release()
-									.perform();
+							t.press(PointOption.point(ScrollBarP.x + errorX, targetElementP.y))
+									.waitAction(WaitOptions.waitOptions(ofSeconds(1))).moveTo(PointOption
+											.point(ScrollBarP.x + ScrollBarS.width - errorX, targetElementP.y))
+									.release().perform();
+
 						} else if (targetElementP.x == ScrollBarP.x) {// 若搜尋元件的x座標等於卷軸x座標，可能表示搜尋元件的部分UI被卷軸遮住
-							t.press(targetElementP.x + targetElementS.width + errorX, targetElementP.y)
-									.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
-									.moveTo(ScrollBarP.x + ScrollBarS.width - errorX, targetElementP.y).release()
-									.perform();
+							t.press(PointOption.point(targetElementP.x + targetElementS.width + errorX,
+									targetElementP.y)).waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+									.moveTo(PointOption.point(ScrollBarP.x + ScrollBarS.width - errorX,
+											targetElementP.y))
+									.release().perform();
 						}
 						break;
 					}
@@ -1128,29 +1163,31 @@ public class method {
 					switch (scroll.toString()) {
 
 					case "DOWN":
-						t.press(ScrollBarP.x + errorX, ScrollBarP.y + ScrollBarS.height - errorY)
-								.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
-								.moveTo(ScrollBarP.x + errorX, ScrollBarP.y + errorY).release().perform();// 向下捲動
+						t.press(PointOption.point(ScrollBarP.x + errorX, ScrollBarP.y + ScrollBarS.height - errorY))
+								.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+								.moveTo(PointOption.point(ScrollBarP.x + errorX, ScrollBarP.y + errorY)).release()
+								.perform();// 向下捲動
 						break;
 
 					case "UP":
-						t.press(ScrollBarP.x + errorX, ScrollBarP.y + errorY)
-								.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
-								.moveTo(ScrollBarP.x + errorX, ScrollBarP.y + ScrollBarS.height - errorY).release()
-								.perform();// 向上捲動
+						t.press(PointOption.point(ScrollBarP.x + errorX, ScrollBarP.y + errorY))
+								.waitAction(WaitOptions.waitOptions(ofSeconds(1))).moveTo(PointOption
+										.point(ScrollBarP.x + errorX, ScrollBarP.y + ScrollBarS.height - errorY))
+								.release().perform();// 向上捲動
 						break;
 
 					case "LEFT":
-						t.press(ScrollBarP.x + ScrollBarS.width - errorX, ScrollBarP.y + errorY)
-								.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
-								.moveTo(ScrollBarP.x + errorX, ScrollBarP.y + errorY).release().perform();// 畫面向左捲動(觀看畫面右方內容)
+						t.press(PointOption.point(ScrollBarP.x + ScrollBarS.width - errorX, ScrollBarP.y + errorY))
+								.waitAction(WaitOptions.waitOptions(ofSeconds(1)))
+								.moveTo(PointOption.point(ScrollBarP.x + errorX, ScrollBarP.y + errorY)).release()
+								.perform();// 畫面向左捲動(觀看畫面右方內容)
 						break;
 
 					case "RIGHT":
-						t.press(ScrollBarP.x + errorX, ScrollBarP.y + errorY)
-								.waitAction(WaitOptions.waitOptions(ofSeconds(2)))
-								.moveTo(ScrollBarP.x + ScrollBarS.width - errorX, ScrollBarP.y + errorY).release()
-								.perform();// 畫面向右捲動(觀看畫面左方內容)
+						t.press(PointOption.point(ScrollBarP.x + errorX, ScrollBarP.y + errorY))
+								.waitAction(WaitOptions.waitOptions(ofSeconds(1))).moveTo(PointOption
+										.point(ScrollBarP.x + ScrollBarS.width - errorX, ScrollBarP.y + errorY))
+								.release().perform();// 畫面向右捲動(觀看畫面左方內容)
 						break;
 
 					}
