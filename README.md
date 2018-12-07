@@ -30,6 +30,7 @@
 
 #### 備註：
 
+* *目前不支援WiFi指令*
 * Appium Client Libraries Version: java-client-6.1.0
 * Selenium Client Version: 3.141.59
 * 若腳本中使用Customized方法, 請於叫用Ant Target欄位最前方填入build，如下圖
