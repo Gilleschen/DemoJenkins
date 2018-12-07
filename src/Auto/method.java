@@ -305,7 +305,7 @@ public class method {
 
 		}
 		EndAppiumSession();// 關閉Appium Session
-		System.out.println("測試結束!!!" + "(" + totaltime + " s)");
+		System.out.println("測試結束!!! " + "(" + totaltime + " s)");
 		return AllResultList;
 	}
 
