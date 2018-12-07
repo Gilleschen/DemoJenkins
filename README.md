@@ -1,5 +1,9 @@
 # 使用說明
 
+#### Framework
+
+![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/framework.png)
+
 #### 使用前須知：
 * 腳本撰寫及Appium相關設定請參考<a href="https://github.com/Gilleschen/Appium_Auto_Testing_Android">Appium_Auto_Testing_Android</a>
 
