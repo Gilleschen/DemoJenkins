@@ -1,4 +1,4 @@
-# Welcome
+# 使用說明
 
 #### 使用前須知：
 * 測試腳本撰寫及Appium相關設定請參考<a href="https://github.com/Gilleschen/Appium_Auto_Testing_Android">Appium_Auto_Testing_Android</a>
