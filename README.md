@@ -30,9 +30,8 @@
 
 #### 備註：
 
-* Appium Client Libraries Version: java-client-6.0.0-BETA2
-* Selenium Client Version: 3.8.1
-* 使用Uiautomator2
+* Appium Client Libraries Version: java-client-6.1.0
+* Selenium Client Version: 3.141.59
 * 若腳本中使用Customized方法, 請於叫用Ant Target欄位最前方填入build，如下圖
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/Ant%20build.PNG)
 
