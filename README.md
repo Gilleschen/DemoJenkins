@@ -7,8 +7,10 @@
 
 #### (1) Jenkins設定
 Step 1. 安裝 <a href="https://jenkins-ci.org/">Jenkins</a>
+
 Step 2. 進入 Global Tool Configuration (設定JDK, Git, Ant, 如下圖)
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/Global%20Tool%20Configuration.png)
+
 Step 3. 於Jenkins安裝 <a href="https://wiki.jenkins.io/display/JENKINS/Zephyr+For+Jira+Test+Management+Plugin">Zephyr for JIRA Test Management plugin</a> (進入設定系統-> Zephyr For JIRA - Test Management Configuration->輸入JIRA Server, 	
  	User Name, Password, 如下圖)
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/zephyr%20_configurate.PNG)
