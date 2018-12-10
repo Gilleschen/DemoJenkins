@@ -9,7 +9,7 @@
 
 * Appium相關設定請參考<a href="https://github.com/Gilleschen/Appium_Auto_Testing_Android">Appium_Auto_Testing_Android</a>之使用前設定
 
-* 本專案無法序列測試多台裝置
+* *本專案無法序列測試多台裝置*
 
 #### (1) Jenkins設定
 Step 1. 安裝 <a href="https://jenkins-ci.org/">Jenkins</a>
