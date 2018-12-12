@@ -374,16 +374,14 @@ public class method {
 	}
 
 	public void logcat(String FilePath) throws IOException {
-		// 收集閃退log
-		// System.out.println("[info] Saving device log...");
+		// 收集log
 		DateFormat df = new SimpleDateFormat("yyyy_MM_dd_HH-mm-ss");
 		Date today = Calendar.getInstance().getTime();
 		String reportDate = df.format(today);
 
 		List<LogEntry> logEntries = driver.manage().logs().get("logcat").filter(Level.ALL);
 		try {
-			FileWriter fw = new FileWriter(FilePath + TestCase.CaseList.get(CurrentCaseNumber).toString() + "_"
-					+ reportDate + "_log" + ".txt");
+			FileWriter fw = new FileWriter(FilePath + reportDate + "_log" + ".txt");
 			for (int i = 0; i < logEntries.size(); i++) {
 				fw.write(logEntries.get(i).toString() + "\n");
 			}
@@ -402,8 +400,7 @@ public class method {
 			Date today = Calendar.getInstance().getTime();
 			String reportDate = df.format(today);
 			File screenShotFile = (File) driver.getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(screenShotFile,
-					new File(FilePath + TestCase.CaseList.get(CurrentCaseNumber) + "_" + reportDate + ".jpg"));
+			FileUtils.copyFile(screenShotFile, new File(FilePath + reportDate + ".jpg"));
 		} catch (IOException e) {
 			System.err.println("[Error] Fail to ErrorScreenShot.");
 		}
@@ -414,7 +411,7 @@ public class method {
 		// C:\TUTK_QA_TestTool\TestReport\appPackage\CaseName\DeviceUdid\log\
 		String filePath = "C:\\TUTK_QA_TestTool\\TestReport\\" + TestCase.DeviceInformation.appPackage.toString() + "\\"
 				+ TestCase.CaseList.get(CurrentCase).toString() + "\\"
-				+ TestCase.DeviceInformation.deviceName.toString() + "\\log\\";
+				+ TestCase.DeviceInformation.deviceName.toString() + "\\Logs\\";
 		File file = new File(filePath);
 		if (!file.exists()) {
 			file.mkdirs();
