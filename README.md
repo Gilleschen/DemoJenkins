@@ -16,8 +16,8 @@ Step 2. 進入 Global Tool Configuration, 設定JDK, Git, Ant, 如下圖：
 
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/Global%20Tool%20Configuration.png)
 
-Step 3. 安裝 <a href="https://wiki.jenkins.io/display/JENKINS/Zephyr+For+Jira+Test+Management+Plugin">Zephyr for JIRA Test Management plugin</a> (進入設定系統-> Zephyr For JIRA - Test Management Configuration->輸入JIRA Server, 	
- 	User Name, Password, 如下圖)
+Step 3. 安裝 <a href="https://wiki.jenkins.io/display/JENKINS/Zephyr+For+Jira+Test+Management+Plugin">Zephyr for JIRA Test Management plugin</a>, 進入設定系統-> Zephyr For JIRA - Test Management Configuration->輸入JIRA Server, 	
+ 	User Name, Password, 如下圖：
   
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/zephyr%20_configurate.PNG)
 
@@ -36,7 +36,7 @@ Step 3. 建置：選擇「叫用Ant」, Target欄位輸入Junit junitreport如�
 
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/ant_2.PNG)
 
-Step 4. 建置後動作：選擇「發佈JUnit測試報告結果」, 欄位填入junit/*.xml, 如下圖
+Step 4. 建置後動作：選擇「發佈JUnit測試報告結果」, 欄位填入「junit/*.xml」 如下圖
 
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/junit.PNG)
 
