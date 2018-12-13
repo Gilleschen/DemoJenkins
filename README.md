@@ -4,7 +4,7 @@
 
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/framework.png)
 
-#### 使用前須知：
+#### 使用前須知
 
 * 腳本撰寫及Appium設定請參考<a href="https://github.com/Gilleschen/Appium_Auto_Testing_Android">Appium_Auto_Testing_Android</a>之腳本建立流程Step 1~Step 5
 
