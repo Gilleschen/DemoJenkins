@@ -34,7 +34,7 @@ Step 2. 原始碼管理：點選「Git」, 輸入本專案網址如下圖
 
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/git.PNG)
 
-Step 3. 建置：點擊新增建置步驟,選擇「叫用Ant」, Target欄位輸入Junit junitreport如下圖
+Step 3. 建置：點擊新增建置步驟, 選擇「叫用Ant」, Target欄位輸入Junit junitreport如下圖
 
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/ant_2.PNG)
 
