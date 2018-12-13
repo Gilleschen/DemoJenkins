@@ -34,15 +34,15 @@ Step 2. 原始碼管理：點選「Git」, 輸入本專案網址如下圖
 
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/git.PNG)
 
-Step 3. 建置：選擇「叫用Ant」, Target欄位輸入Junit junitreport如下圖
+Step 3. 建置：點擊新增建置步驟,選擇「叫用Ant」, Target欄位輸入Junit junitreport如下圖
 
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/ant_2.PNG)
 
-Step 4. 建置後動作：選擇「發佈JUnit測試報告結果」, 欄位填入junit/*.xml, 如下圖
+Step 4. 建置後動作：點擊新增建置後動作, 選擇「發佈JUnit測試報告結果」, 欄位填入junit/*.xml, 如下圖
 
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/junit.PNG)
 
-Step 5. 建置後動作：選擇「Publish test result to Zephyr for JIRA」
+Step 5. 建置後動作：點擊新增建置後動作, 選擇「Publish test result to Zephyr for JIRA」
 
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/zephyr_2.PNG)
 
