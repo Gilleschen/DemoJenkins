@@ -5,11 +5,13 @@
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/framework.png)
 
 #### 使用前須知：
+
 * 腳本撰寫及Appium設定請參考<a href="https://github.com/Gilleschen/Appium_Auto_Testing_Android">Appium_Auto_Testing_Android</a>之腳本建立流程Step 1~Step 5
 
 * *本專案無法序列測試多台裝置*
 
 #### (1) Jenkins設定
+
 Step 1. 安裝 <a href="https://jenkins-ci.org/">Jenkins</a>
 
 Step 2. 進入 Global Tool Configuration, 設定JDK, Git, Ant, 如下圖：
@@ -26,6 +28,7 @@ Step 3. 安裝 <a href="https://wiki.jenkins.io/display/JENKINS/Zephyr+For+Jira+
 Step 1. 建立新 <a href="https://zephyrdocs.atlassian.net/wiki/spaces/ZTD/pages/3244044/Creating+and+Cloning+Test+Cycles">Zephyr Test Cycle</a>
 
 #### (3) Jenkins作業組態設定
+
 Step 1. 新增Jenkins作業
 
 Step 2. 原始碼管理：點選「Git」, 輸入本專案網址如下圖
