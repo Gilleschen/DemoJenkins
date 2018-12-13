@@ -6,6 +6,14 @@
 
 #### 使用前須知
 
+* 安裝 Appium (http://appium.io/)
+
+* 環境設定 (請參考<a href="http://www.qa-knowhow.com/?p=2363">Appium手機自動化測試從頭學 –Windows/Android環境安裝篇</a>)
+
+* 下載<a href="https://github.com/Gilleschen/Appium_Auto_Testing/blob/master/TestScript.xlsm"> TestScript.xlsm</a>至C:\TUTK_QA_TestTool\TestTool資料夾
+
+* 建立C:\TUTK_QA_TestTool\TestReport資料夾
+
 * 腳本撰寫及Appium設定請參考<a href="https://github.com/Gilleschen/Appium_Auto_Testing_Android">Appium_Auto_Testing_Android</a>之腳本建立流程Step 1~Step 5
 
 * *本專案無法序列測試多台裝置*
