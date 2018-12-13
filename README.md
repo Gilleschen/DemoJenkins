@@ -14,7 +14,7 @@
 #### (1) Jenkins設定
 Step 1. 安裝 <a href="https://jenkins-ci.org/">Jenkins</a>
 
-Step 2. 進入 Global Tool Configuration (設定JDK, Git, Ant, 如下圖
+Step 2. 進入 Global Tool Configuration, 設定JDK, Git, Ant, 如下圖：
 
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/Global%20Tool%20Configuration.png)
 
