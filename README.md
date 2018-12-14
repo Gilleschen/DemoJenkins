@@ -1,10 +1,10 @@
-# 使用說明
+# 說明
 
 #### Framework
 
 ![image](https://github.com/Gilleschen/Zephyr-Jenkins/blob/master/picture/framework.png)
 
-#### 使用前須知
+#### 使用說明
 
 * 安裝 Appium (http://appium.io/)
 
